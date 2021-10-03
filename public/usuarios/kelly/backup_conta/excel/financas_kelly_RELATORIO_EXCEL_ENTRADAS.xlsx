@@ -1,0 +1,8 @@
+<meta charset='UTF-8'><table border='1'>
+            <caption> Relatorio Entradas </caption>
+            <thead>
+                <tr> <th>codigo</th><th>descricao</th><th>obs</th><th>valor</th><th>ativo</th><th>fixo</th><th>data_compensacao</th><th>codigo_entrada</th></tr>
+            </thead>
+                <tbody> 
+                </tbody>
+                    </table>
