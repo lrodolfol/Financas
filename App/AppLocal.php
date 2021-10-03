@@ -17,7 +17,7 @@ class AppLocal {
 
     public function __construct() {
         /*
-         * Constantes do sistemanndd
+         * Constantes do sistemannddkk
          * Atualize com suas informações.. =)
          */
         define('EMAIL_DESENVOLVEDOR', '');
