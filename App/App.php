@@ -7,7 +7,7 @@ use App\Controllers\LoginController;
 use App\Controllers\_404Controller;
 use Exception;
 
-class AppLocal {
+class App {
 
     private $controller;
     private $controllerFile;
@@ -18,41 +18,53 @@ class AppLocal {
     public function __construct() {
         /*
          * Constantes do sistema
-         * Atualize com suas informações.
+		 * serão usados por todo o sistema. Atualize com suas informações. :)
          */
-        define('EMAIL_DESENVOLVEDOR', '');
-        define('RAIZ_SITE', $_SERVER['DOCUMENT_ROOT'] . "/financas");
-        define('NOME_SITE', $_SERVER['SERVER_NAME'] . "/financas");
+        define('EMAIL_DESENVOLVEDOR', 'financas@kellyerodolfo.com.br');
+		define('RAIZ_SITE', $_SERVER['DOCUMENT_ROOT'] . "/financas"); 
+        define('NOME_SITE', $_SERVER['SERVER_NAME']);
         define('APP_HOST', $_SERVER['HTTP_HOST'] . "/financas");
         define('PATH', realpath('./'));
-        define('TITLE', "Financas TESTE" . (Lib\Sessao::retornaUsuario() ));
-        define('DB_HOST', "localhost");
+        define('TITLE', "Financas " . (Lib\Sessao::retornaUsuario() ) ) ;
+        //define('DB_HOST', "br670.hostgator.com.br:3306");
+        //define('DB_HOST', "br670.hostgator.com.br:2083");
+		define('DB_HOST', "localhost");
         //define('DB_USER', "root");
-        define('DB_PASSWORD', "");
+        define('DB_PASSWORD', "8bY19vPv6c");
         if (isset($_POST['User']) && $_POST['User'] = "true") {
-            define('DB_NAME', "financas");
+            define('DB_NAME', "kellye90_financas");
             define('NAME_USER', $_POST['user']);
-            define('DB_USER', "root");
+            define('DB_USER', "kellye90_financa");
         } else {
-            define('DB_USER', "root");
-            if (Lib\Sessao::retornaUsuario()) {
+            define('DB_USER', "kellye90_financa");
+            if(Lib\Sessao::retornaUsuario() ) {
                 $userName = Lib\Sessao::retornaUsuario();
-                define('DB_NAME', "financas_" . $userName . "");
-            } else {
+                define('DB_NAME', "kellye90_financas_" . $userName . "");
+            }else{
                 //define('DB_NAME', "financas_padrao");
             }
+            
         }
         define('DB_DRIVER', "mysql");
+        /*CONSTANTES DE ENVIO DE MAIL*/
+        define("MAIL",[
+            "host" => "mail.kellyerodolfo.com.br",
+            "port" => "465",
+            "user" => "",
+            "password" => "#Sojesussalva1",
+            "fromName" => "Finanças",
+            "fromEmail" => "financas@kellyerodolfo.com.br"
+            ]);
 
         $this->url();
     }
 
     public function run() {
-
-        /* if(! Lib\Sessao::retornaUsuario()) {
-          $this->controller = null;
-          } */
-
+        
+       /* if(! Lib\Sessao::retornaUsuario()) {
+            $this->controller = null;
+        }*/
+        
         if ($this->controller) {
             $this->controllerName = ucwords($this->controller) . 'Controller';
             $this->controllerName = preg_replace('/[^a-zA-Z]/i', '', $this->controllerName);
@@ -79,9 +91,9 @@ class AppLocal {
         }
 
         if (!file_exists(PATH . '/App/Controllers/' . $this->controllerFile)) {
-            $this->controller = new _404Controller($this);
+			$this->controller = new _404Controller($this);
             $this->controller->index();
-            return;
+			return;
             //throw new Exception("Página não encontrada.", 404);
         }
 
@@ -99,10 +111,7 @@ class AppLocal {
             $objetoController->index($this->params);
             return;
         } else {
-            //throw new Exception("Nosso suporte já esta verificando desculpe!", 500);
-            $this->controller = new _404Controller($this);
-            $this->controller->index();
-            return;
+            throw new Exception("Nosso suporte já esta verificando desculpe!", 500);
         }
         throw new Exception("Página não encontrada.", 404);
     }
