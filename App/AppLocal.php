@@ -18,7 +18,7 @@ class AppLocal {
     public function __construct() {
         /*
          * Constantes do sistema
-         * Atualize com suas informações. :)
+         * Atualize com suas informações. =)
          */
         define('EMAIL_DESENVOLVEDOR', '');
         define('RAIZ_SITE', $_SERVER['DOCUMENT_ROOT'] . "/financas");
