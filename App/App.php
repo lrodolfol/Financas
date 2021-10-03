@@ -18,42 +18,38 @@ class App {
     public function __construct() {
         /*
          * Constantes do sistema
-		 * serão usados por todo o sistema. Atualize com suas informações. :)
          */
-        define('EMAIL_DESENVOLVEDOR', 'financas@kellyerodolfo.com.br');
+        define('EMAIL_DESENVOLVEDOR', 'email@seudominio.com.br');
 		define('RAIZ_SITE', $_SERVER['DOCUMENT_ROOT'] . "/financas"); 
         define('NOME_SITE', $_SERVER['SERVER_NAME']);
         define('APP_HOST', $_SERVER['HTTP_HOST'] . "/financas");
         define('PATH', realpath('./'));
         define('TITLE', "Financas " . (Lib\Sessao::retornaUsuario() ) ) ;
-        //define('DB_HOST', "br670.hostgator.com.br:3306");
-        //define('DB_HOST', "br670.hostgator.com.br:2083");
 		define('DB_HOST', "localhost");
         //define('DB_USER', "root");
-        define('DB_PASSWORD', "8bY19vPv6c");
+        define('DB_PASSWORD', "suasenhaBDaqui");
         if (isset($_POST['User']) && $_POST['User'] = "true") {
-            define('DB_NAME', "kellye90_financas");
+            define('DB_NAME', "seuBDName");
             define('NAME_USER', $_POST['user']);
-            define('DB_USER', "kellye90_financa");
+            define('DB_USER', "seuBDUser");
         } else {
-            define('DB_USER', "kellye90_financa");
+            define('DB_USER', "seuBDUser");
             if(Lib\Sessao::retornaUsuario() ) {
                 $userName = Lib\Sessao::retornaUsuario();
-                define('DB_NAME', "kellye90_financas_" . $userName . "");
+                define('DB_NAME', "seuBDName" . $userName . "");
             }else{
-                //define('DB_NAME', "financas_padrao");
             }
             
         }
         define('DB_DRIVER', "mysql");
         /*CONSTANTES DE ENVIO DE MAIL*/
         define("MAIL",[
-            "host" => "mail.kellyerodolfo.com.br",
-            "port" => "465",
+            "host" => "",
+            "port" => "",
             "user" => "",
-            "password" => "#Sojesussalva1",
-            "fromName" => "Finanças",
-            "fromEmail" => "financas@kellyerodolfo.com.br"
+            "password" => "",
+            "fromName" => "",
+            "fromEmail" => ""
             ]);
 
         $this->url();
