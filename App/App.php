@@ -18,7 +18,7 @@ class App {
     public function __construct() {
         /*
          * Constantes do sistema
-		 * serão usados por todo o sistema
+		 * serão usados por todo o sistema. Atualize com suas informações.
          */
         define('EMAIL_DESENVOLVEDOR', 'financas@kellyerodolfo.com.br');
 		define('RAIZ_SITE', $_SERVER['DOCUMENT_ROOT'] . "/financas"); 
