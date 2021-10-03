@@ -18,9 +18,10 @@ class App {
     public function __construct() {
         /*
          * Constantes do sistema
+		 * serão usados por todo o sistema
          */
         define('EMAIL_DESENVOLVEDOR', 'financas@kellyerodolfo.com.br');
-	define('RAIZ_SITE', $_SERVER['DOCUMENT_ROOT'] . "/financas"); 
+		define('RAIZ_SITE', $_SERVER['DOCUMENT_ROOT'] . "/financas"); 
         define('NOME_SITE', $_SERVER['SERVER_NAME']);
         define('APP_HOST', $_SERVER['HTTP_HOST'] . "/financas");
         define('PATH', realpath('./'));
