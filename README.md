@@ -56,7 +56,7 @@ Feito sobre estrutura MVC POO com funcionalidades básicas como:
 ### Autor
 - [Rodolfo J.Silva](https://github.com/lrodolfol) (Developer)
 - [LinkeIn](https://www.linkedin.com/in/rodolfoj-silva/)
-- [Email](rodolfo0ti@gmail.com)
+- Email: (rodolfo0ti@gmail.com)
 
 ## License
 The MIT License (MIT).
