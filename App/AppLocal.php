@@ -81,7 +81,7 @@ class AppLocal {
             $this->controller = new _404Controller($this);
             $this->controller->index();
             return;
-            //throw new Exception("Página não encontrada.", 404);
+            //throw new Exception("Página não encontrada :(.", 404);
         }
 
         $nomeClasse = "\\App\\Controllers\\" . $this->controllerName;
@@ -98,6 +98,7 @@ class AppLocal {
             $objetoController->index($this->params);
             return;
         } else {
+            var_dump($this->action);
             //throw new Exception("Nosso suporte já esta verificando desculpe!", 500);
             $this->controller = new _404Controller($this);
             $this->controller->index();

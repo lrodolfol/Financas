@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Lib\Sessao;
+use Dompdf\Dompdf;
 
 abstract class Controller {
 
@@ -14,6 +15,11 @@ abstract class Controller {
         $this->setViewParam('nameAction', $app->getAction());
     }
 
+    public function print($params) {
+        $this->setViewParam('jsonDados', $params);
+        $this->render('/debito/print');
+    }
+
     public function openFile($caminho) {
         $this->setViewParam('arquivo', $caminho[0]);
         $this->render("/arquivo/index");
@@ -23,7 +29,12 @@ abstract class Controller {
         $viewVar = $this->getViewVar();
         $Sessao = Sessao::class;
 
-        require_once PATH . '/App/Views/layouts/header.php';
+        //SÓ MOSTRA O HEADER COM JS E CSS SE NÃO FOR PRINT
+        //JÁ QUE O DOM PDF MOSTRA ERRO SE TIVER ALGO NO CABECALHO: Unable to stream pdf: headers already sent
+        if ($view != "/debito/print") { 
+            require_once PATH . '/App/Views/layouts/header.php';
+        }
+        
         if ($view == "login/index") {
             require_once PATH . '/App/Views/' . $view . '.php';
         } else {
@@ -32,12 +43,14 @@ abstract class Controller {
                 $this->render("login/index");
                 return;
             }
-            if ($view != "/usuario/novo" && $view != "/usuario/recuperaSenha" && $view != "home/notFound") {
+            if ($view != "/usuario/novo" && $view != "/usuario/recuperaSenha" && $view != "home/notFound" && $view != "/debito/print") {
                 require_once PATH . '/App/Views/layouts/menu.php';
             }
             require_once PATH . '/App/Views/' . $view . '.php';
         }
-        require_once PATH . '/App/Views/layouts/footer.php';
+        if ($view != "/debito/print") {
+            require_once PATH . '/App/Views/layouts/footer.php';
+        }
     }
 
     public function redirect($view) {
@@ -54,7 +67,7 @@ abstract class Controller {
             $this->viewVar[$varName] = $varValue;
         }
     }
-    
+
     public function carregaImagem($tipo, $codigo) {
         if ($tipo == "CREDITO") {
             $nomePasta = RAIZ_SITE . "/public/comprovantes/" . Sessao::retornaUsuario() . "/creditos/credito" . $codigo . "";

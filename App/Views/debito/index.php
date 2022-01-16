@@ -4,6 +4,29 @@ $dataFinal = $_REQUEST['data_final'];
 $palavra = $_REQUEST['palavra'];
 $valorTotalPesquisa = 0;
 $ehPasta = false;
+
+$tabelaPrint = '<table>'; //abre table
+$tabelaPrint .= '<thead>'; //abre cabeçalho
+$tabelaPrint .= '<tr>'; //abre uma linha
+
+$tabelaPrint .= '<th>Codigo</th>'; //cabecalho 
+$tabelaPrint .= '<th>Desc</th>'; //cabecalho 
+$tabelaPrint .= '<th>Data</th>'; //cabecalho 
+$tabelaPrint .= '<th>Lugar</th>'; //cabecalho 
+$tabelaPrint .= '<th>Pag</th>'; //cabecalho 
+$tabelaPrint .= '<th>Valor</th>'; //cabecalho 
+$tabelaPrint .= '</tr>'; //cabecalho 
+$tabelaPrint .= '</thead>'; //fecha cabeçalho
+$tabelaPrint .= '<tbody>'; //abre corpo da tabela
+
+$jsonDados = array(
+    array("codigo" => 0,
+        "valor" => 10),
+    array("codigo" => 0,
+        "valor" => 10)
+);
+$jsonDados = null;
+$cont = 0;
 ?>
 
 <div class="container">
@@ -92,8 +115,8 @@ $ehPasta = false;
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover">
                         <tr>
-                            <td width="1" class="info">Codigo</td>
-                            <td class="info">Descrição</td>
+                            <td width="1" class="info">Codigo</td> 
+                            <td class="info">Descrição</td> 
                             <td class="info">Dta Compra</td>
                             <td class="info">Lugar Compra</td>
                             <td class="info">Forma Pag.</td>
@@ -101,6 +124,7 @@ $ehPasta = false;
                             <td width="1"  class="info">Ativo</td>
                             <td width="250" class="info">Opções</td>
                         </tr>
+
                         <?php
                         foreach ($viewVar['listaDebito'] as $debito) {
                             ?>
@@ -114,28 +138,54 @@ $ehPasta = false;
                                 <?php $valorTotalPesquisa = $valorTotalPesquisa + $debito->total_geral; ?>
                                 <td><?php echo $debito->getAtivo(); ?></td>
                                 <td>
-                                    <?php $cripty =  base64_encode($debito->getCodigo()) . "99Fin" . base64_encode(\App\Lib\Sessao::retornaUsuario() . $debito->getobs()); ?>
-                                    
+                                    <?php $cripty = base64_encode($debito->getCodigo()) . "99Fin" . base64_encode(\App\Lib\Sessao::retornaUsuario() . $debito->getobs()); ?>
+
                                     <a href="http://<?php echo APP_HOST; ?>/debito/edicao/<?php echo $cripty; ?>" class="btn btn-success btn-sm">Editar</a>
                                     <a href="http://<?php echo APP_HOST; ?>/debito/excluir/<?php echo $debito->getCodigo(); ?>" onclick="return confirm('Deletar débito??')"  class="btn btn-danger btn-sm">Excluir</a>
                                     <a href="http://<?php echo APP_HOST; ?>/debito/detalhes/<?php echo base64_encode($debito->getCodigo()); ?>" class="btn btn-info btn-sm">Detalhes</a>
                                     <?php
                                     $caminhoImagem = "http://" . APP_HOST . "/public/comprovantes/" . $Sessao::retornaUsuario() . "/debitos/debito" . $debito->getCodigo() . "/debito_codigo_" . $debito->getCodigo() . ".jpg";
-                                    
+
                                     //O CAMINHO PARA CONDIÇÃO DO 'file_exists' NÃO DEVE SER FEITO ATRAVÉS DE URL. PRECISA USAR CAMINHO DE ARQUIVO NO DISCO RÍGIDO 
                                     $caminhoCondicao = RAIZ_SITE . "/public/comprovantes/" . $Sessao::retornaUsuario() . "/debitos/debito" . $debito->getCodigo() . "/debito_codigo_" . $debito->getCodigo() . ".jpg";
-                                    if (file_exists($caminhoCondicao)) {   
-                                      ?> <a href="http://<?php echo APP_HOST; ?>/debito/openFile/<?php echo base64_encode("-public-comprovantes-" . $Sessao::retornaUsuario() . "-debitos-debito" . $debito->getCodigo() . "-debito_codigo_" . $debito->getCodigo() . ".jpg"); ?>" target="_blank"> <img src="http://<?php echo APP_HOST; ?>/public/images/visualizar.png" /></a> <?php    
+                                    if (file_exists($caminhoCondicao)) {
+                                        ?> <a href="http://<?php echo APP_HOST; ?>/debito/openFile/<?php echo base64_encode("-public-comprovantes-" . $Sessao::retornaUsuario() . "-debitos-debito" . $debito->getCodigo() . "-debito_codigo_" . $debito->getCodigo() . ".jpg"); ?>" target="_blank"> <img src="http://<?php echo APP_HOST; ?>/public/images/visualizar.png" /></a> <?php
                                     } else {
-                                      ?> <a target="_blank"> <img src="http://<?php echo APP_HOST; ?>/public/images/visualizar-no.png" /></a> <?php  
-                                    }
-                                    ?>
+                                        ?> <a target="_blank"> <img src="http://<?php echo APP_HOST; ?>/public/images/visualizar-no.png" /></a> <?php
+                                        }
+                                        ?>
                                 </td>
                             </tr>
                             <?php
+                            if (strtoupper($debito->getAtivo()) == 'S') {
+                                $tabelaPrint .= '<tr>';
+                                $tabelaPrint .= '<td>' . $debito->getCodigo() . '</td>';
+                                $tabelaPrint .= '<td>' . $debito->getobs() . '</td>';
+                                $tabelaPrint .= '<td>' . date('d/m/Y', strtotime($debito->data_compra)) . '</td>';
+                                $tabelaPrint .= '<td>' . $debito->getEstabelecimento() . '</td>';
+                                $tabelaPrint .= '<td>' . $debito->forma_pagamento . '</td>';
+                                $tabelaPrint .= '<td>' . number_format($debito->total_geral, '2', ',', '.') . '</td>';
+                                $tabelaPrint .= '</tr>';
+
+                                $jsonDados[$cont] = array(
+                                    "data" => date('d/m/Y', strtotime($debito->data_compra)),
+                                    "descricao" => $debito->getObs(),
+                                    "lugar" => $debito->getEstabelecimento(),
+                                    "valor" => number_format($debito->total_geral, '2', ',', '.')
+                                );
+                            }
+                            $cont++;
                         }
+
+                        $tabelaPrint .= '</tbody>';
+                        $tabelaPrint .= '</table>';
                         ?>
                     </table>
+
+                    <a href="http://<?php echo APP_HOST; ?>/debito/print/<?php echo base64_encode(json_encode($jsonDados)); ?>?2021-10-05" class="btn btn-success btn-sm"> 
+                        <img src="http://<?php echo APP_HOST; ?>/public/images/printer.ico" />  Imprimir
+                    </a>
+
                 </div>
                 <?php
                 echo $viewVar['paginacao'];

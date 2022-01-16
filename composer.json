@@ -3,5 +3,21 @@
     "psr-4": {
         "App\\": "App"
     }
-  }
+  },
+  
+    "name":"tinosnegocios/financas",
+    "description":"fistema para controle de finanças pessoais",
+    "minimum-stability":"stable",
+    "authors":[{
+            "name":"Rodolfo JSilva",
+            "email":"rodolfo0ti@gmail.com",
+            "role":"TI NOS NEGÓCIOS"
+    }],
+
+    "license": "MIT",
+
+   "require": {
+        "dompdf/dompdf": "0.8.*"
+    }
+  
 }
