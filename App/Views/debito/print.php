@@ -9,6 +9,10 @@ $dataInicio = $jsonDados[0]['data'];
 $dataFim = $jsonDados[count($jsonDados) - 1]['data'];
 ob_start();
 
+$jsonDados = null;
+$jsonDados = base64_decode($viewVar['jsonDados'][0]);
+$jsonDados = json_decode($jsonDados);
+
 $optionsDomPdf = new Options();
 $optionsDomPdf->setIsRemoteEnabled(true);
 $domPdf = new Dompdf($optionsDomPdf);
