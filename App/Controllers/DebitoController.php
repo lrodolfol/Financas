@@ -95,11 +95,12 @@ class DebitoController extends Controller {
         $Debito->setQtdParcelas($_POST['qtdParcelas']);
         $Debito->setObs($_POST['observacao']);
         $Debito->setAtivo(isset($_POST['ativo']) ? 'S' : 'N');
+        $Debito->setAtipico(isset($_POST['atipico']) ? 'S' : 'N');
         $Debito->setFixo($_POST['fixo']);
         $Debito->setJuros($_POST['juros']);
         $Debito->setDesconto($_POST['desconto']);
         $nomeEstabelecimento = strstr($_POST['estabelecimento'], ':');
-        
+               
         //INSERE OS VALORES NA ENTRADA
         $DebitoValidador = new DebitoValidador();
         $ErroDebito = $DebitoValidador->validarCabecalho($Debito);

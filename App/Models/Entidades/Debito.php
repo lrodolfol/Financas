@@ -30,7 +30,16 @@ class Debito {
     private $unidadeMedida;
     private $juros;
     private $desconto;
-    
+    private $atipico;
+
+    function getAtipico() {
+        return $this->atipico;
+    }
+
+    function setAtipico($atipico): void {
+        $this->atipico = $atipico;
+    }
+
     function getDesconto() {
         return $this->desconto;
     }

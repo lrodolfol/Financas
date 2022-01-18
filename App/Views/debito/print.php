@@ -1,19 +1,17 @@
 <?php
-
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
 $jsonDados = base64_decode($viewVar['jsonDados'][0]);
-$jsonDados = json_decode($jsonDados);
-$dataInicio = $jsonDados[0]->data;
-$dataFim = $jsonDados[count($jsonDados) - 1]->data;
+$jsonDados = json_decode($jsonDados, true);
+
+$dataInicio = $jsonDados[0]['data'];
+$dataFim = $jsonDados[count($jsonDados) - 1]['data'];
 ob_start();
 
 $optionsDomPdf = new Options();
 $optionsDomPdf->setIsRemoteEnabled(true);
-
 $domPdf = new Dompdf($optionsDomPdf);
-
 $coresTabela = ['#C0C0C0', 'white'];
 $cont = 0;
 

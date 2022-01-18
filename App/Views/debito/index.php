@@ -129,7 +129,7 @@ $cont = 0;
                         foreach ($viewVar['listaDebito'] as $debito) {
                             ?>
                             <tr>
-                                <td><?php echo $debito->getCodigo(); ?></td>
+                                <td><?php echo $debito->getCodigo() . ($debito->getAtipico() == 'S' ? ' - A' : '' ); ?></td>
                                 <td><?php echo $debito->getobs(); ?></td>
                                 <td><?php echo date('d/m/Y', strtotime($debito->data_compra)); ?></td>
                                 <td><?php echo $debito->getEstabelecimento(); ?></td>

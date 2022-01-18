@@ -40,7 +40,7 @@ class DebitoDAO extends BaseDAO {
             $inicio = (($paginaSelecionada - 1) * $totalPorPagina);
 
             $sql = "SELECT c.*, e.nome as estabelecimento, f.descricao as forma_pagamento FROM saida_cabecalho c LEFT JOIN saidas_itens s ON c.codigo = s.codigo_cabecalho INNER JOIN estabelecimentos e ON c.estabelecimento = e.codigo "
-                    . " INNER join formas_pagamento f ON c.forma_pagamento = f.codigo WHERE c.id IS NOT NULL ";
+                    . " INNER join formas_pagamento f ON c.forma_pagamento = f.codigo WHERE c.id IS NOT NULL  ";
             $sqlContador = "SELECT count(*) as total_linhas FROM saida_cabecalho c LEFT JOIN saidas_itens s ON c.codigo = s.codigo_cabecalho INNER JOIN estabelecimentos e ON c.estabelecimento = e.codigo "
                     . " INNER join formas_pagamento f ON c.forma_pagamento = f.codigo WHERE c.id IS NOT NULL ";
 
@@ -54,7 +54,7 @@ class DebitoDAO extends BaseDAO {
                 $where .= " AND obs like '%$palavra%' OR s.produto like '%$palavra%' OR e.nome like '%$palavra%' OR f.descricao like '%$palavra%' OR s.produto like '%$palavra%' OR c.obs like '%$palavra%' ";
             }
 
-            $sql .= $where . " GROUP BY c.codigo ORDER BY c.codigo DESC, ativo ";
+            $sql .= $where . " GROUP BY c.codigo ORDER BY c.data_debito DESC, c.codigo DESC, ativo ";
             $sql .= " LIMIT " . $inicio . "," . $totalPorPagina;
             $sqlContador .= $where;
 
@@ -112,6 +112,7 @@ class DebitoDAO extends BaseDAO {
             $formaPagamento = $debito->getFormaPagamento();
             $qdtParcelas = $debito->getQtdParcelas();
             $ativo = $debito->getAtivo();
+            $atipico = $debito->getAtipico();
             $fixo = ( $debito->getFixo() ? $debito->getFixo() : 0 );
             $observacao = $debito->getObs();
             $juros = $debito->getJuros();
@@ -131,7 +132,7 @@ class DebitoDAO extends BaseDAO {
             
             return $this->insert(
                             'saida_cabecalho',
-                            "codigo,:data_compra,:data_debito,:valor_total,:estabelecimento,:forma_pagamento,:qtd_parcelas,:ativo,:obs,:fixo,:juros,:total_geral,:desconto",
+                            "codigo,:data_compra,:data_debito,:valor_total,:estabelecimento,:forma_pagamento,:qtd_parcelas,:ativo,:obs,:fixo,:juros,:total_geral,:desconto,:atipico",
                             [
                                 ':codigo' => $codigo,
                                 ':data_compra' => "'" . $dataCompra . "'",
@@ -146,6 +147,7 @@ class DebitoDAO extends BaseDAO {
                                 ':juros' => $juros,
                                 ':total_geral' => $totalGeral,
                                 ':desconto' => $desconto,
+                                ':atipico' => "'" . $atipico . "'",
                             ]
             );
         } catch (\Exception $e) {

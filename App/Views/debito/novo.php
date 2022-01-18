@@ -103,6 +103,14 @@ if (isset($_SESSION['codigo'])) {
                                 <input type="checkbox" name="ativo" value="aativo" checked>
                             </div>
                         </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="atipico">Atipico</label>
+                                <input type="checkbox" name="atipico" value="aatipico">
+                            </div>
+                        </div>
+
                     </div>
                     <div class="row">
                         <div class="col-md-8">
