@@ -38,7 +38,7 @@ class HomeDAO extends BaseDAO {
 
     public function consultaDebitosCreditosFuturos($proximosDiasDebito, $proximosDiasCredito) {
         $sql =  "SELECT sum(valor_total) as total_debitos, "
-                . " (SELECT sum(valor) FROM contas_receber c WHERE data_compensacao > current_date() AND ativo = 'S' "
+                . " (SELECT sum(valor) FROM contas_receber c WHERE data_compensacao >= current_date() AND ativo = 'S' "
                 . " and creditado = 'N' AND data_compensacao < DATE_ADD(current_date(), INTERVAL " . $proximosDiasCredito . " DAY) ) as total_creditos, "
                 . " ( (SELECT saldo FROM caixa  WHERE data <= current_date() AND ativo = 'S' ORDER BY id DESC LIMIT 1) + "
                 . " (SELECT coalesce(sum(valor),0) FROM contas_receber WHERE data_compensacao > current_date() AND "

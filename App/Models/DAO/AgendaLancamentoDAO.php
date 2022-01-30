@@ -273,14 +273,14 @@ class AgendaLancamentoDAO extends BaseDAO {
     }
 
     public function carregaLancamentoFuturos(AgendaLancamento $AgendaLancamento) {
-        $sql = "SELECT * FROM lancamentos_futuros l WHERE ativo = 'S' ";
+        $sql = "SELECT *, i.unidade_medida FROM lancamentos_futuros l LEFT JOIN lancamentos_futuros_itens i ON l.codigo = i.codigo_cabecalho WHERE l.ativo = 'S' ";
         if (!empty($AgendaLancamento->getId())) {
-            $sql .= " AND id = " . $AgendaLancamento->getId() . "  ";
+            $sql .= " AND l.id = " . $AgendaLancamento->getId() . "  ";
         } else {
             $sql .= " AND l.data_debito <= current_date() ";
         }
         if (empty($AgendaLancamento->getCodigo()) && empty($AgendaLancamento->getCodigoDebito())) {
-            $sql .= " AND debitado = 'N' ";
+            $sql .= " AND l.debitado = 'N' ";
         }
 
         $sql .= " LIMIT 1 ";
@@ -301,6 +301,7 @@ class AgendaLancamentoDAO extends BaseDAO {
         $AgendaLancamento->setCodigo($retorno['codigo']);
         $AgendaLancamento->setId($retorno['id']);
         $AgendaLancamento->setJuros($retorno['juros']);
+        $AgendaLancamento->setUnidadeMedida($retorno['unidade_medida']);
         return true;
     }
 

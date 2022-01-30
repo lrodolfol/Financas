@@ -17,7 +17,7 @@ use App\Controllers\TarefasController;
 class HomeController extends Controller {
 
     public function index() {
-        //BEDITAR LANÇAMENTOS FUTUROS QUE PODEM SER HOJE
+        //EDITAR LANÇAMENTOS FUTUROS QUE PODEM SER HOJE
         //$Tarefas = new TarefasController();
         //$Tarefas->debitaLancamentosFuturos(null);
         //$this->render('/Tarefas/debitaLancamentosFuturos');

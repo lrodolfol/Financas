@@ -55,7 +55,7 @@ class TarefasDAO extends BaseDAO {
                     $DebitoItensAtualizar->setQtdProduto(1);
                     $DebitoItensAtualizar->setValorProduto($value['valor_produto'] / $Debito->getQtdParcelas());
                     $DebitoItensAtualizar->setAtivo("S");
-                    $DebitoItensAtualizar->setUnidadeMedida("UND");
+                    $DebitoItensAtualizar->setUnidadeMedida($value['unidade_medida']);
 
                     $DebitoDAO->salvarItens($DebitoItensAtualizar);
                 }

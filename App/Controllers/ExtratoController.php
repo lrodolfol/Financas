@@ -31,7 +31,7 @@ class ExtratoController extends Controller {
 
         $codigo = ($codProduto ? $codProduto : null);
         $dataInicio = ($dataInicial ? $dataInicio : isset($_POST['dataInicial']) ? $_POST['dataInicial'] : null);
-        $dataFim = ($dataFinal ? $dataFim : isset($_POST['dataFinal']) ? $_POST['dataFinal'] : null);
+        $dataFim = ( ($dataFinal ? $dataFim : isset($_POST['dataFinal'])) ? $_POST['dataFinal'] : null);
 
         self::setViewParam('extratoPeriodo', $ExtratoDAO->custoProduto($codigo, $dataInicio, $dataFim));
 

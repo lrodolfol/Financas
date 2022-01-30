@@ -13,7 +13,10 @@ class Conexao
     private function __construct(){}
 
     public static function getConnection() {
-
+        if(!Sessao::retornaUsuario()) {
+            throw new Exception("Conexão suspensa. Faça o login novamente");
+        }
+        var_dump(DB_NAME);
         $pdoConfig  = DB_DRIVER . ":". "host=" . DB_HOST . ";";
         $pdoConfig .= "dbname=".DB_NAME.";";
         $pdoConfig .= "charset=utf8;";
