@@ -7,7 +7,7 @@ $jsonDados = json_decode($jsonDados, true);
 
 $dataInicio = $jsonDados[0]['data'];
 $dataFim = $jsonDados[count($jsonDados) - 1]['data'];
-ob_start();
+//ob_start();
 
 $jsonDados = null;
 $jsonDados = base64_decode($viewVar['jsonDados'][0]);

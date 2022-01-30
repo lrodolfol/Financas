@@ -17,6 +17,7 @@ class ContasReceber
     private $lucroReal;
     private $creditado;
     private $codigoEntrada;
+    public static $tableName = 'contas_receber';   
     
     function getCodigoEntrada() {
         return $this->codigoEntrada;

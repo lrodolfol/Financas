@@ -1,7 +1,7 @@
 <footer class="footer">
     <div class="container">
         <p class="text-muted">
-        &copy; 2020 <a href="https://br.linkedin.com/in/rodolfoj-silva" target="_blank" style="text-decoration: none">Rodolfo J.Silva</a>
+        &copy; 2021 <a href="https://br.linkedin.com/in/rodolfoj-silva" target="_blank" style="text-decoration: none">Rodolfo J.Silva</a>
         <?php
         if ($baseDadosOperante == "PRODUCAO") {
             echo 'Base de PRODUÇÃO';

@@ -98,7 +98,7 @@ $calculaDataVencida = function ($data) {
             <?php
             if (!count($viewVar['listaContaReceber'])) {
                 ?>
-                <div class="alert alert-info" role="alert">Nenhum débito encontrado até agora</div>
+                <div class="alert alert-info" role="alert">Nenhum contas a receber encontrado até agora</div>
                 <?php
             } else {
                 ?>

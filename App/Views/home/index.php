@@ -35,8 +35,13 @@ $retornaValorPorcentagem = function($valorMesAnterior, $valorMesAtual) {
     $valor = $valorMenor = 0 ? ($valor / $valorMenor) : $valor;
     $valor = $valor * 100;*/
     
-    $valor = (($valorMaior - $valorMenor) / $valorMenor) * 100;
-            
+    //$valor = (($valorMaior - $valorMenor) / $valorMenor) * 100;
+    if($valor <= 0) {
+        $valor = 0;
+    }else{
+        $valor = (($valorMaior - $valorMenor) / $valorMenor) * 100;   
+    }
+    
     if($valorMaior == $valorMesAnterior) {
         $valor *= -1;
     }
@@ -186,7 +191,16 @@ $retornaValorPorcentagem = function($valorMesAnterior, $valorMesAtual) {
      
     ?>
 
+    <?php if($evolucaoValor <= 0) : ?>
+    <div class="container">
+        <div class="starter-template">
+            <div class="col-md-12">
+                <b><u>O gráfico de rentabilidade irá apacer após o 1º registro de valores</u></b>
+            </div>    
+        </div>
+    </div>
     
+    <?php endif; ?>
     
     <script>
         window.onload = function () {

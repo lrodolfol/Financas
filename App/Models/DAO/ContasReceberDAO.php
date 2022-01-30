@@ -118,5 +118,11 @@ class ContasReceberDAO extends BaseDAO {
             throw new \Exception("Erro na gravação de dados. " . $e, 500);
         }
     }
+    
+    public function excluir(\App\Models\Entidades\ContasReceber $ContasReceber) {
+        $codigo = $ContasReceber->getCodigo();
+        
+        return $this->delete($ContasReceber::$tableName, "codigo = $codigo");
+    }
 
 }

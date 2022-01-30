@@ -1,12 +1,3 @@
-<style>
-    body{
-        width: 100%;
-        background-image: url('http://localhost/financas/public/images/bkg1.png');
-        background-repeat: no-repeat;
-        background-size: 100% 100%;
-    }
-
-</style>
 <div class="container">
     <div class="centro-tela">
         <div class="starter-template">
@@ -38,3 +29,8 @@
         </div>
     </div>
 </div>
+
+<?php
+$nomr = "http:// " . $APP_HOST ."/login/logar";
+var_dump(APP_HOST);
+?>

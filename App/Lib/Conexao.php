@@ -52,7 +52,7 @@ class Conexao
             return self::$connection;
         } catch (PDOException $e) {
             Sessao::limpaUsuario();
-            throw new Exception("Erro de conexão com o banco de dados:: financas" . DB_NAME,500);
+            throw new Exception("Erro de conexão com o banco de dados:: financas" . DB_NAME . ' Erro: ' . $e,500);
         }
     }
     

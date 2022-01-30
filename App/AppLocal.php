@@ -66,7 +66,7 @@ class AppLocal {
 
         $this->controllerFile = $this->controllerName . '.php';
         $this->action = preg_replace('/[^a-zA-Z]/i', '', $this->action);
-
+$this->controller = 'Login';
         if (!$this->controller) {
             if (Lib\Sessao::retornaUsuario()) {
                 $this->controller = new HomeController($this);

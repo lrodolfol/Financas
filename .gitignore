@@ -2,3 +2,4 @@ banco-conexao.txt
 App/App.php
 App/AppLocal.php
 App/Teste.php
+/vendor/

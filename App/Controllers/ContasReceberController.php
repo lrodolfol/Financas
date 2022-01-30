@@ -134,5 +134,21 @@ class ContasReceberController extends Controller {
         }
         $this->index();
     }
+    
+     public function excluir($params) {
+        $codigo = $params[0];
+        
+        $ContasReceber = new ContasReceber();
+        $ContasReceber->setCodigo($codigo);
+        
+        $ContasReceberDAO = new ContasReceberDAO();
+        if($ContasReceberDAO->excluir($ContasReceber)) {
+            Sessao::gravaMensagem("Crédito a receber excluido com sucesso!");
+        }else{
+            Sessao::gravaMensagem("Erro ao excluir o contas a receber!");
+        }
+        
+        $this->index();
+    }
 
 }

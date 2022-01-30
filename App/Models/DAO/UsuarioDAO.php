@@ -3,6 +3,7 @@
 namespace App\Models\DAO;
 
 use App\Models\Entidades\Usuario;
+
 //use App\Models\DAO\BaseDAO
 
 class UsuarioDAO extends BaseDAOFinancas {
@@ -15,7 +16,7 @@ class UsuarioDAO extends BaseDAOFinancas {
         $row = $this->FinancasRetornaDado($sql);
         return $row;
     }
-    
+
     public function recuperarSenha($email) {
         $sql = "SELECT * FROM usuarios WHERE email = '" . $email . "'";
         $row = $this->RetornaDado($sql);
@@ -32,11 +33,9 @@ class UsuarioDAO extends BaseDAOFinancas {
 
     public function trocaSenha($email, $novaSenha) {
         $rowUsuario = $this->update2(
-                'usuarios',
-                [
-                    'senha' => "md5('" . $novaSenha . "')",
-                ],
-                "email = '" . $email . "'"
+                'usuarios', [
+            'senha' => "md5('" . $novaSenha . "')",
+                ], "email = '" . $email . "'"
         );
         return $rowUsuario;
     }
@@ -84,14 +83,12 @@ class UsuarioDAO extends BaseDAOFinancas {
         }
 
         return $this->insert(
-                        'usuarios',
-                        ":codigo,:idade,:nome,:sobreNome,:senha",
-                        [
-                            ':codigo' => "'" . $codigo . "'",
-                            ':idade' => "'" . $idade . "'",
-                            ':nome' => "'" . $nome . "'",
-                            ':sobrenome' => "'" . $sobreNome . "'",
-                            ':senha' => "'" . $senha . "'",
+                        'usuarios', ":codigo,:idade,:nome,:sobreNome,:senha", [
+                    ':codigo' => "'" . $codigo . "'",
+                    ':idade' => "'" . $idade . "'",
+                    ':nome' => "'" . $nome . "'",
+                    ':sobrenome' => "'" . $sobreNome . "'",
+                    ':senha' => "'" . $senha . "'",
                         ]
         );
     }
@@ -115,6 +112,23 @@ class UsuarioDAO extends BaseDAOFinancas {
 
         $sqlCreateDataBase = array();
         $sqlCreateTables = array();
+
+        /*
+         * ARQUIVO SQL DA RAZ DO PROJETO
+         */
+        define("SQL_ARQUIVO_USUARIO", $_SERVER['DOCUMENT_ROOT'] . "\\financas\\financas_usuario.sql"); //RECUPERA O DIRETORIO DO ARQUIVO
+        if (is_file(SQL_ARQUIVO_USUARIO)) {
+            $arquivo = fopen(SQL_ARQUIVO_USUARIO, "r");         //FAZ A ABERTURA DO ARQUIVO 'r' SOMENTE PARA LEITURA
+            
+            $bancoConexao = "CREATE DATABASE IF NOT EXISTS `financas_`" . $nome . " DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; USE `financas_`" . $nome .";";
+                       
+            $tamanho = filesize(SQL_ARQUIVO_USUARIO);          //RECUPERA O TAMANHO DO ARQUIVO EM QUESTÃO
+            $conexao = fread($arquivo, $tamanho);       //ATRIBUI O ARQUIVO A UMA VARIAVEL
+            $bancoConexao .= utf8_encode($conexao);            //MOSTRA O ARQUIVO
+            fclose($arquivo);                          //FECHA O ARQUIVO EM QUESTÃO
+        }
+        //var_dump($bancoConexao);
+        //die();
 
         //SQL INSERT NA TABELA DE USUÁRIOS
         $sqlCreateDataBase[0] = "INSERT INTO usuarios (codigo, data_nascimento, nome, sobrenome, senha, email, recebe_email, data_cadastro) "
@@ -293,7 +307,7 @@ class UsuarioDAO extends BaseDAOFinancas {
                 . "COMMIT ";
 
         $rowUsuario = $this->FinancasDDL($sqlCreateDataBase, $sqlCreateTables, $nome);
-
+        //$rowUsuario = $this->FinancasDDL($sqlCreateDataBase, $sqlCreateTables, $nome); //$bancoConexao
         return $rowUsuario;
     }
 
