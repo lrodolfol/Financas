@@ -15,7 +15,7 @@ class AppLocal {
     private $params;
     public $controllerName;
 
-    public function __construct() {
+    public function __construct($baseOperante) {
         /*
          * Constantes do sistema
          */
@@ -42,7 +42,7 @@ class AppLocal {
             }
         }
         define('DB_DRIVER', "mysql");
-
+        define('BASE_DADOS_OPERANTE', $baseOperante);
         $this->url();
     }
 
@@ -98,7 +98,6 @@ $this->controller = 'Login';
             $objetoController->index($this->params);
             return;
         } else {
-            var_dump($this->action);
             //throw new Exception("Nosso suporte já esta verificando desculpe!", 500);
             $this->controller = new _404Controller($this);
             $this->controller->index();

@@ -3,9 +3,9 @@
         <p class="text-muted">
         &copy; 2021 <a href="https://br.linkedin.com/in/rodolfoj-silva" target="_blank" style="text-decoration: none">Rodolfo J.Silva</a>
         <?php
-        if ($baseDadosOperante == "PRODUCAO") {
+        if (BASE_DADOS_OPERANTE == "PRODUCAO") {
             echo 'Base de PRODUÇÃO';
-        } elseif ($baseDadosOperante == "LOCAL") {
+        } elseif (BASE_DADOS_OPERANTE == "LOCAL") {
             echo 'Base LOCAL';
         }else{
             echo 'Base de TESTES';

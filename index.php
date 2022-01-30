@@ -27,11 +27,11 @@ if(is_file(TXT_BANCO)){
 try {
     $app = null;
     if ($bancoConexao == "PRODUCAO") {
-		$app = new App();
+		$app = new App($bancoConexao);
     } elseif ($bancoConexao == "TESTE") {
-		$app = new AppTeste();
+		$app = new AppTeste($bancoConexao);
     }else{
-	    $app = new AppLocal();
+	    $app = new AppLocal($bancoConexao);
 	}
 
     $app->run();
