@@ -15,7 +15,7 @@ abstract class Controller {
         $this->setViewParam('nameAction', $app->getAction());
     }
 
-    public function print($params) {
+    public function printer($params) {
         $this->setViewParam('jsonDados', $params);
         $this->render('/debito/print');
     }

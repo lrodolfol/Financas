@@ -182,7 +182,7 @@ $cont = 0;
                         ?>
                     </table>
 
-                    <a href="http://<?php echo APP_HOST; ?>/debito/print/<?php echo base64_encode(json_encode($jsonDados)); ?>?2021-10-05" class="btn btn-success btn-sm"> 
+                    <a href="http://<?php echo APP_HOST; ?>/debito/printer/<?php echo base64_encode(json_encode($jsonDados)); ?>?2021-10-05" class="btn btn-success btn-sm"> 
                         <img src="http://<?php echo APP_HOST; ?>/public/images/printer.ico" />  Imprimir
                     </a>
 
