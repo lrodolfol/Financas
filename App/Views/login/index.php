@@ -29,8 +29,3 @@
         </div>
     </div>
 </div>
-
-<?php
-$nomr = "http:// " . $APP_HOST ."/login/logar";
-var_dump(APP_HOST);
-?>

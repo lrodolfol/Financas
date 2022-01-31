@@ -38,6 +38,7 @@ $retornaValorPorcentagem = function($valorMesAnterior, $valorMesAtual) {
     //$valor = (($valorMaior - $valorMenor) / $valorMenor) * 100;
     if($valor <= 0) {
         $valor = 0;
+        $valor = (($valorMaior - $valorMenor) / $valorMenor) * 100;   
     }else{
         $valor = (($valorMaior - $valorMenor) / $valorMenor) * 100;   
     }
@@ -172,8 +173,6 @@ $retornaValorPorcentagem = function($valorMesAnterior, $valorMesAtual) {
       array("y" => 20, "label" => "Saturday")
       );
 
-      var_dump($dataPoints);
-      var_dump($dataPontss);
 
       foreach($viewVar["graficoSaldoMax"] as $grafico => $value) {
       //echo var_dump($value) . '<br>';
