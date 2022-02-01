@@ -3,11 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/wamp64/www/financas/App/AppLocal.php</file>
-            <file>file:/C:/wamp64/www/financas/App/Views/layouts/menu.php</file>
-            <file>file:/C:/wamp64/www/financas/index.php</file>
-            <file>file:/C:/wamp64/www/financas/App/Views/layouts/footer.php</file>
-            <file>file:/C:/wamp64/www/financas/App/Views/layouts/header.php</file>
+            <file>file:/C:/wamp64/www/financas/App/Models/DAO/CaixaDAO.php</file>
+            <file>file:/C:/wamp64/www/financas/App/Controllers/DebitoController.php</file>
+            <file>file:/C:/wamp64/www/financas/App/Models/DAO/BaseDAO.php</file>
+            <file>file:/C:/wamp64/www/financas/App/Lib/Conexao.php</file>
         </group>
     </open-files>
 </project-private>

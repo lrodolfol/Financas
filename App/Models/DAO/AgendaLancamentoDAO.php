@@ -273,7 +273,7 @@ class AgendaLancamentoDAO extends BaseDAO {
     }
 
     public function carregaLancamentoFuturos(AgendaLancamento $AgendaLancamento) {
-        $sql = "SELECT *, i.unidade_medida FROM lancamentos_futuros l LEFT JOIN lancamentos_futuros_itens i ON l.codigo = i.codigo_cabecalho WHERE l.ativo = 'S' ";
+        $sql = "SELECT l.*, i.unidade_medida FROM lancamentos_futuros l LEFT JOIN lancamentos_futuros_itens i ON l.codigo = i.codigo_cabecalho WHERE l.ativo = 'S' ";
         if (!empty($AgendaLancamento->getId())) {
             $sql .= " AND l.id = " . $AgendaLancamento->getId() . "  ";
         } else {
