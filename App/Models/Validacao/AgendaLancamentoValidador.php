@@ -11,7 +11,7 @@ class AgendaLancamentoValidador {
     public function validarItens(AgendaLancamento $AgendaLancamento) {
         //$resultadoValidacao = new ResultadoValidacao();
 
-        $sql = "SELECT SUM(valor_total) as valor_total, codigo FROM lancamentos_futuros WHERE codigo = "
+        $sql = "SELECT CAST(SUM(valor_total) AS DECIMAL(15,2)) as valor_total, codigo FROM lancamentos_futuros WHERE codigo = "
                 . "" . $AgendaLancamento->getCodigoCabecalho() . " AND ativo = 'S' ";
         $AgendaLancamentoDAO = new AgendaLancamentoDAO();
         $row = $AgendaLancamentoDAO->RetornaDado($sql);
@@ -22,7 +22,9 @@ class AgendaLancamentoValidador {
             $codigo = $row['codigo'];
             $valorTotal = $row['valor_total'];
 
-            $sql = "SELECT COALESCE(SUM(valor_produto * qtd_produto), 0) FROM lancamentos_futuros_itens WHERE codigo_cabecalho = " . $AgendaLancamento->getCodigoCabecalho() . "";
+            $sql = "SELECT COALESCE(SUM(valor_produto * qtd_produto), 0) "
+                    . "FROM lancamentos_futuros_itens WHERE "
+                    . "codigo_cabecalho = " . $AgendaLancamento->getCodigoCabecalho() . "";
 
             $valorItens = $AgendaLancamentoDAO->RetornaDado($sql);
 

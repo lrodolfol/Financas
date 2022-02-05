@@ -109,8 +109,10 @@ $calculaDataVencida = function ($data) {
                         <td><?php
                             if ($diaVenceu > 0) {
                                 echo "Venceu há " . str_replace("+", "", $diaVenceu) . " dias ";
-                            } else {
+                            } else if($diaVenceu < 0) {
                                 echo "Vencerá em " . str_replace("-", "", $diaVenceu) . " dias ";
+                            }else{
+                                echo "Vence Hoje!";
                             }
                             ?>
                         <td>
