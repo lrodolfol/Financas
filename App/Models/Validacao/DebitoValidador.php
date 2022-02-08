@@ -39,22 +39,24 @@ class DebitoValidador {
             return "Código de débito não encontrado";
         } else {
             $codigo = $row['codigo'];
-            $valorTotal = number_format($row['valor_total'], '2', '.', ',');
+            $valorTotal = number_format($row['valor_total'], '2', ',', '.');
+            $valorTotalComp = number_format($row['valor_total'],0,'','');
 
             $sql = "SELECT SUM(valor_produto * qtd_produto) FROM saidas_itens WHERE codigo_cabecalho = " . $Debito->getCodigoCabecalho() . "";
 
             $valorItens = $DebitoDAO->RetornaDado($sql);
 
-            if ($valorItens[0] > $valorTotal) {
-                return "O valor total da saida de R$ " . number_format($valorTotal, '2', ',', '.') . " já foi contabilizado";
+            if ($valorItens[0] > $valorTotalComp) {
+                return "O valor total da saida de R$ " . number_format($valorTotalComp, '2', ',', '.') . " já foi contabilizado";
             } else {
                 $valorValidacao = $Debito->getQtdProduto() * $Debito->getValorProduto() + $valorItens[0];
                 $valorValidacao = floor($valorValidacao * 100) / 100;
-                $valorValidacao = number_format($valorValidacao, '2', '.', ',');
-                if ($valorValidacao > $valorTotal) {
+                //$valorValidacao = number_format($valorValidacao, '2', '.', ',');
+                $VRTESTE = $valorValidacao - $valorTotalComp;
+                if ($valorValidacao > $valorTotalComp) {
                     //$rr = $Debito->getQtdProduto() * $Debito->getValorProduto() + $valorItens[0];
-                    $valorRestante = $valorTotal - $valorItens[0];
-                    return "O valor desse produto exede o valor disponivel de R$ " . number_format($valorRestante, '2', ',', '.') . " para essa saida. Total de R$ " . number_format($valorTotal, '2', ',', '.') . " ";
+                    $valorRestante = $valorTotalComp - $valorItens[0];
+                    return "O valor desse produto exede o valor disponivel de R$ " . number_format($valorRestante, '2', ',', '.') . " para essa saida. Total de R$ " . number_format($valorTotalComp, '2', ',', '.') . " ";
                 } else {
                     return "";
                 }
