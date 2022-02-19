@@ -27,7 +27,7 @@ class AppLocal {
         define('TITLE', "Financas TESTE" . (Lib\Sessao::retornaUsuario() ));
         define('DB_HOST', "localhost");
         //define('DB_USER', "root");
-        define('DB_PASSWORD', "");
+        define('DB_PASSWORD', "1234");
         if (isset($_POST['User']) && $_POST['User'] = "true") {
             define('DB_NAME', "financas");
             define('NAME_USER', $_POST['user']);

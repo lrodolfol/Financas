@@ -5,9 +5,8 @@ use Dompdf\Options;
 $jsonDados = base64_decode($viewVar['jsonDados'][0]);
 $jsonDados = json_decode($jsonDados, true);
 
-$dataInicio = $jsonDados[0]['data'];
-$dataFim = $jsonDados[count($jsonDados) - 1]['data'];
-//ob_start();
+$dataInicio = date('d/m/Y', strtotime($viewVar['datas'][0]));
+$dataFim = date('d/m/Y', strtotime($viewVar['datas'][1]));
 
 $jsonDados = null;
 $jsonDados = base64_decode($viewVar['jsonDados'][0]);
@@ -36,10 +35,10 @@ $html .= "<table border=1px solid black>
             <tbody>";
                 foreach ($jsonDados as $debito => $value) {
                    $html .= "<tr style='background-color: $coresTabela[$cont]'> 
-                        <td>" . date('d/m/Y', strtotime($value->data)) . "</td>
-                        <td>" . $value->descricao ."</td>
+                        <td>" . $value->data . "</td>
+                        <td>" . str_replace("Débito Lanç Futuro", "Contas a pagar", $value->descricao)  ."</td>
                         <td>" . $value->lugar . "</td>
-                        <td>" . number_format($value->valor, '2', ',', '.') . "</td>
+                        <td>" . $value->valor . "</td>
                     </tr>";
                    
                    $cont = $cont >= count($coresTabela) - 1 ? 0 : $cont + 1;

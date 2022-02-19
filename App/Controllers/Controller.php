@@ -16,6 +16,9 @@ abstract class Controller {
     }
 
     public function printer($params) {
+        $datas = $_GET['datas'];
+        $datas = explode("|", $datas);
+        $this->setViewParam('datas', $datas);
         $this->setViewParam('jsonDados', $params);
         $this->render('/debito/print');
     }

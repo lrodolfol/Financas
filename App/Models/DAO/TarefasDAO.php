@@ -28,7 +28,7 @@ class TarefasDAO extends BaseDAO {
         $nomeEstabelecimento = $row[0];
 
         $Debito->setFormaPagamento($AgendaLancamento->getFormaPagamento());
-        $Debito->setObs("Débito Lanç Futuro cod " . $AgendaLancamento->getCodigo() . ' em: ' . $nomeEstabelecimento . ". " . $AgendaLancamento->getObs());
+        $Debito->setObs("Contas a pagar cod " . $AgendaLancamento->getCodigo() . ' em: ' . $nomeEstabelecimento . ". " . $AgendaLancamento->getObs());
         $Debito->setQtdParcelas($AgendaLancamento->getQtdParcelas());
         $Debito->setValorTotal($AgendaLancamento->getValorTotal());
         $Debito->setJuros($AgendaLancamento->getJuros());

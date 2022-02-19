@@ -1,6 +1,9 @@
 <?php
 $dataInicial = $_REQUEST['data_inicial'];
 $dataFinal = $_REQUEST['data_final'];
+if ($dataFinal && $dataInicial) {
+    $dataValidas = true;
+}
 $palavra = $_REQUEST['palavra'];
 $valorTotalPesquisa = 0;
 $ehPasta = false;
@@ -127,6 +130,10 @@ $cont = 0;
 
                         <?php
                         foreach ($viewVar['listaDebito'] as $debito) {
+                            if (!$dataValidas) {
+                                $dataFinal = $dataFinal ? $dataFinal : $debito->data_compra;
+                                $dataInicial = $debito->data_compra;
+                            }
                             ?>
                             <tr>
                                 <td><?php echo $debito->getCodigo() . ($debito->getAtipico() == 'S' ? ' - A' : '' ); ?></td>
@@ -182,7 +189,7 @@ $cont = 0;
                         ?>
                     </table>
 
-                    <a href="http://<?php echo APP_HOST; ?>/debito/printer/<?php echo base64_encode(json_encode($jsonDados)); ?>?2021-10-05" class="btn btn-success btn-sm"> 
+                    <a href="http://<?php echo APP_HOST; ?>/debito/printer/<?php echo base64_encode(json_encode($jsonDados)); ?>?datas=<?= $dataInicial; ?> | <?= $dataFinal; ?>" class="btn btn-success btn-sm"> 
                         <img src="http://<?php echo APP_HOST; ?>/public/images/printer.ico" />  Imprimir
                     </a>
 
