@@ -54,22 +54,6 @@ $retornaValorPorcentagem = function($valorMesAnterior, $valorMesAtual) {
     <div class="starter-template">
 
         <div class="col-md-12">
-            <?php
-            if($usuarioLogado == "kelly") {
-                $msg = [
-                    "Uma boa noiva sempre da o dinheiro pro noivo",
-                    "Uma boa noiva arruma o quarto do noivo",
-                    "Uma boa noiva faz uma boa comida",
-                    "Já pagou as contas do noivo hoje?",
-                    "Diga ao seu noivo o quanto você o ama",
-                    "Agradeça a Deus pelo noivo que você tem",
-                    "Noivo negão é D+",
-                    "Dolfo lindo, Dolfo maravilhoso, Dolfo bonito, Dolfo gostoso!"
-                ];
-                $mensagem = $msg[rand(0,7)] ;
-                echo "<h2> Kelly . $mensagem . </h2>";
-            }
-            ?>
             <h2><?php echo 'Bem vindo, ' . ucfirst($usuarioLogado) . ".	"; ?></h2>
             <p>Você tem em caixa um valor total de R$
                 <i style="color: <?php echo $corSaldo; ?>">

@@ -68,6 +68,7 @@ class HomeDAO extends BaseDAO {
         . "ORDER BY x.id DESC LIMIT 1)   END AS total FROM caixa c "
         . "WHERE date(CONCAT(EXTRACT(YEAR FROM c.data),'.',EXTRACT(MONTH FROM c.data),'.01')) > "
         . "date(CONCAT(EXTRACT(YEAR FROM CURRENT_DATE)-1,'.',EXTRACT(MONTH FROM CURRENT_DATE),'.01')) "
+        . "AND lower(descricao) NOT LIKE '%ajuste mensal%' "       
         . "GROUP BY EXTRACT(month from data), EXTRACT(year from data) ORDER BY c.data";
         $resultado = $this->select($sql);
         $row = $resultado->fetchAll();

@@ -1173,7 +1173,7 @@ class ContaController extends Controller {
           $email->add("Um novo relato de erro!", "<h1>O usuario " . Sessao::retornaCodigoUsuario() . " criou um novo relato de erro no sistema Finanças</h1>",
           "Rodolfo de Jesus Silva", "rodolfo0ti@gmail.com");
           
-          */
+          die(); */
 
         $this->render("home/meusRelatosErros");
     }
