@@ -13,6 +13,8 @@ use App\Models\DAO\FormaPagamentoDAO;
 use App\Models\DAO\EstabelecimentoDAO;
 use App\Models\DAO\AgendaLancamentoDAO;
 use App\Models\Entidades\AgendaLancamento;
+use App\Models\DAO\CarteirasDAO;
+use App\Models\Entidades\Carteira;
 use App\Lib\Paginacao;
 
 //use App\Models\Validacao\ProdutoValidador;
@@ -153,9 +155,20 @@ class DebitoController extends Controller {
                     }
                     //SE GRAVOU TUDO CORRETAMENTE, ENTÃO CARREGA IMAGEM
                     $rowImagemDebito = $this->carregaImagem("DEBITO", $Debito->getCodigo());
+                                    
+                    //MARCA O VALOR DA CARTEIRA VINCULADA
+                    $Carteira = new Carteira();
+                    $Carteira->setFormaPagamento($Debito->getFormaPagamento());
+                    $Carteira->setCodSaidaCabecalho($Debito->getCodigo());
+                    $Carteira->setValor($Debito->getValorTotal());
+                    $Carteira->setData($Debito->getDataDebito());
+                    $Carteira->setObservacao($Caixa->getDescricao() . " no valor de R$ {$Debito->getValorTotal()} ");
+                    
+                    $CarteiraDAO = new CarteirasDAO();
+                    $gravouCarteira = $CarteiraDAO->registrarMovimentacao($Carteira);
 
                     Sessao::gravaCodigo($Debito->getCodigo());
-                    Sessao::gravaMensagem("Saida gravado com sucesso. Cod: " . $Debito->getCodigo() . ". " . $rowImagemDebito);
+                    Sessao::gravaMensagem("Saida gravado com sucesso. Cod: " . $Debito->getCodigo() . ". " . $rowImagemDebito . $gravouCarteira ? "" : ". Erro na saida de carteira");
                 } else {
                     Sessao::gravaErro("Ocorreu um eror ao inserir o débito na caixa");
                 }

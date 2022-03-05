@@ -86,7 +86,7 @@ abstract class BaseDAO {
             }
         }
     }
-    
+
     public function retornaObject($sql) {
         if (!empty($sql)) {
             if ($this->conexao->query($sql)) {
@@ -98,6 +98,14 @@ abstract class BaseDAO {
                 return false;
             }
         }
+    }
+
+    public function insertSubquery($sql) {
+        $stmt = $this->conexao->prepare($sql);
+
+        $stmt->execute();
+
+        return $stmt->rowCount();
     }
 
     public function insert($table, $cols, $values) {
@@ -310,18 +318,18 @@ abstract class BaseDAO {
         $emailDestinatario = Sessao::retornaEmail();
 
         $emailRemetente = "financas@" . NOME_SITE;
-        
-       /* $emailMsg = <<<DEM
-                        <html>
-                            <body>
-                                <article>
-                                    <h1>Rodolfo JSILVA</h1>
-                                    <h2>CEO TI NOS NEGÓCIOS</h2>
-                                    <h3>Não basta saber que as coisas funcionan, preciso descobrir como elas funcionam</h3>
-                                </article>
-                            </body>
-                        </html>
-                    DEM;*/
+
+        /* $emailMsg = <<<DEM
+          <html>
+          <body>
+          <article>
+          <h1>Rodolfo JSILVA</h1>
+          <h2>CEO TI NOS NEGÓCIOS</h2>
+          <h3>Não basta saber que as coisas funcionan, preciso descobrir como elas funcionam</h3>
+          </article>
+          </body>
+          </html>
+          DEM; */
 
         $mensagem = "Olá " . ucfirst(Sessao::retornaUsuario()) . ", Uma nova operação foi feita em sua conta Finanças! \r\n"
                 . "Você acabou de realizar uma nova operação em nossa plataforma! \r\n\r\n"
@@ -361,7 +369,7 @@ abstract class BaseDAO {
         return $envio;
         //return true;
     }
-    
+
     public function listaPaginacao($tabela, $codigo = null, $dataInicial = null, $dataFinal = null, $palavra = null, $paginaSelecionada, $totalPorPagina, $lucro_real = null) {
         $where = "";
         if ($codigo) {
@@ -383,7 +391,7 @@ abstract class BaseDAO {
             return $resultado->fetchAll(\PDO::FETCH_CLASS, Credito::class);
         } else {
             $inicio = (($paginaSelecionada - 1) * $totalPorPagina);
-            
+
             $sql = "SELECT * FROM " . $tabela . " e WHERE id IS NOT NULL ";
             $sqlContador = "SELECT count(*) as total_linhas FROM entradas e WHERE id IS NOT NULL ";
 
@@ -414,16 +422,16 @@ abstract class BaseDAO {
 
         return false;
     }
-            
-    public function verificaMesEncerrado($mes,  $ano) {
-        $sql = "SELECT * FROM encerramento WHERE mes = " .$mes . " AND "
-                . " ano = " .$ano . " AND encerrado = 'S' ";
+
+    public function verificaMesEncerrado($mes, $ano) {
+        $sql = "SELECT * FROM encerramento WHERE mes = " . $mes . " AND "
+                . " ano = " . $ano . " AND encerrado = 'S' ";
         $row = $this->Consultaselect($sql);
-        if($row) {
+        if ($row) {
             return true;
-        }else{
+        } else {
             return false;
         }
-    }       
+    }
 
 }

@@ -19,6 +19,11 @@
                     <a href="http://<?php echo APP_HOST; ?>" >Home</a>
                 </li>
                 <li class="dropdown">
+                    <!--
+                    --============
+                    -- Cadastros--
+                    --============
+                    -->
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">Cadastros <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li <?php if ($viewVar['nameController'] == "CreditoController" && $viewVar['nameAction'] == "novo") { ?> class="active" <?php } ?>>
@@ -46,6 +51,9 @@
                         </li>
                         <li <?php if ($viewVar['nameController'] == "FormaPagamentoController" && $viewVar['nameAction'] == "novo") { ?> class="active" <?php } ?>>
                             <a href="http://<?php echo APP_HOST; ?>/formaPagamento/novo" >Forma Pagamento</a>
+                        </li>
+                         <li <?php if ($viewVar['nameController'] == "CarteirasController" && $viewVar['nameAction'] == "novo") { ?> class="active" <?php } ?>>
+                            <a href="http://<?php echo APP_HOST; ?>/carteiras/novo" >Carteiras</a>
                         </li>
                         <li <?php if ($viewVar['nameController'] == "UsuarioController" && $viewVar['nameAction'] == "index") { ?> class="active" <?php } ?>>
                             <a href="http://<?php echo APP_HOST; ?>/usuario/index" >

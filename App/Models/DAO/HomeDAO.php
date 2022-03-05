@@ -62,13 +62,18 @@ class HomeDAO extends BaseDAO {
         $sql = "SELECT CONCAT(EXTRACT(month from data),'/',EXTRACT(year from data)) AS periodo,  "
         . "CASE WHEN EXTRACT(month from data) = EXTRACT(month from current_date) then "
         . "(SELECT saldo FROM caixa  WHERE data <= current_date() AND ativo = 'S' "
-        . "ORDER BY id DESC LIMIT 1) else (SELECT x.saldo FROM caixa x WHERE "
+        . "ORDER BY id DESC LIMIT 1) ";
+        /*. " + " //SUBTRAI AJUSTES
+	. " COALESCE( (SELECT SUM(valor_total) FROM saida_cabecalho s inner join estabelecimentos e "
+        . " on s.estabelecimento = e.codigo  AND lower(e.nome) LIKE '%ajuste mensal%'  AND "
+        . " date(CONCAT(EXTRACT(YEAR FROM s.data_debito),'.',EXTRACT(MONTH FROM s.data_debito),'.01')) = "
+        . " date(CONCAT(EXTRACT(YEAR FROM CURRENT_DATE()),'.',EXTRACT(MONTH FROM CURRENT_DATE()),'.01') ) ),0) " //FIM SUBTRAI AJUSTE    */           
+        $sql = $sql . " else (SELECT x.saldo FROM caixa x WHERE "
         . "CONCAT(EXTRACT(MONTH FROM x.data),'/',EXTRACT(YEAR FROM x.DATA)) = "
         . "CONCAT(EXTRACT(MONTH FROM c.data),'/',EXTRACT(YEAR FROM c.DATA))  "
         . "ORDER BY x.id DESC LIMIT 1)   END AS total FROM caixa c "
         . "WHERE date(CONCAT(EXTRACT(YEAR FROM c.data),'.',EXTRACT(MONTH FROM c.data),'.01')) > "
         . "date(CONCAT(EXTRACT(YEAR FROM CURRENT_DATE)-1,'.',EXTRACT(MONTH FROM CURRENT_DATE),'.01')) "
-        . "AND lower(descricao) NOT LIKE '%ajuste mensal%' "       
         . "GROUP BY EXTRACT(month from data), EXTRACT(year from data) ORDER BY c.data";
         $resultado = $this->select($sql);
         $row = $resultado->fetchAll();
