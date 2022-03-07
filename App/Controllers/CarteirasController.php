@@ -43,7 +43,7 @@ class CarteirasController extends Controller {
 
         $this->novo();
     }
-  
+
     public function index() {
         
     }
@@ -58,6 +58,50 @@ class CarteirasController extends Controller {
 
     public function atualizar($params) {
         
+    }
+
+    //AQUI TO USANDO O MESMO METODO PARA REQ GET E POST.
+    public function transferencia($params) {
+        if (isset($_POST) && (!empty($_POST))) {
+
+            $carteiraCredito = new Carteira();
+            $carteiraCredito->setId($_POST['carteira_credito']);
+            $carteiraCredito->setCodEntrada(null);
+            $carteiraCredito->setCodSaidaCabecalho(null);
+            $carteiraCredito->setData($_POST['data_transferencia']);
+            $carteiraCredito->setFormaPagamento(null);
+            $carteiraCredito->setNome(null);
+            $carteiraCredito->setObservacao("Transferência entre carteiras. {$_POST['observacao']}");
+            $carteiraCredito->setValor($_POST['valor_transferencia']);
+
+            $carteiraDebito = clone $carteiraCredito;
+            $carteiraDebito->setId($_POST['carteira_debito']);
+
+            //VALIDA DATA
+            if ($carteiraCredito->getData() > DATE('Y/m/d')) {
+                Sessao::gravaErro("Data de transferência não pode ser maior que hoje!");
+            } else {
+                $CarteiraDAO = new CarteirasDAO();
+                $result = $CarteiraDAO->transferencia($carteiraCredito, $carteiraDebito);
+
+                if ($result) {
+                    Sessao::gravaMensagem("Transferência realizada com sucesso");
+                } else {
+                    Sessao::gravaErro("Erro ao realizar a transferência. Tente novamente");
+                }
+            }
+
+            $carteiras = (new CarteirasDAO())->retornaCarteirasDistinctValor();
+            self::setViewParam('carteiras', $carteiras);
+
+            $this->render('/carteiras/transferencia');
+
+            return;
+        }
+
+        $carteiras = (new CarteirasDAO())->retornaCarteirasDistinctValor();
+        self::setViewParam('carteiras', $carteiras);
+        $this->render('/carteiras/transferencia');
     }
 
 }

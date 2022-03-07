@@ -64,6 +64,11 @@
                     </ul>
                 </li>
                 <li class="dropdown">
+                     <!--
+                    --============
+                    -- Consultas--
+                    --============
+                    -->
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">Consultas <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li <?php if ($viewVar['nameController'] == "CreditoController" && $viewVar['nameAction'] == "index") { ?> class="active" <?php } ?>>
@@ -98,6 +103,12 @@
                         </li>
                     </ul>
                 </li>
+                
+                 <!--
+                    --============
+                    -- Relatorios--
+                    --============
+                    -->
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">Relatórios <span class="caret"></span></a>
                     <ul class="dropdown-menu">
@@ -134,6 +145,12 @@
                         </li>
                     </ul>
                 </li>
+                
+                 <!--
+                    --============
+                    -- Operações--
+                    --============
+                    -->
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">Operações <span class="caret"></span></a>
                     <ul class="dropdown-menu">
@@ -147,6 +164,12 @@
                             <a href="javascript:popup()">
                                 Calculadora
                                 <img title="abrir calculadora simples" src="<?php echo "http://" . APP_HOST . "/public/images/calculator.ico" ?> ">
+                            </a>
+                        </li>
+                        <li <?php if ($viewVar['nameController'] == "CarteirasControlle" && $viewVar['nameAction'] == "transferencia") { ?> class="active" <?php } ?>>
+                            <a href="http://<?php echo APP_HOST; ?>/Carteiras/transferencia" >
+                                Transf carteiras
+                                <img title="Transferência entre carteiras" src="<?php echo "http://" . APP_HOST . "/public/images/wllet-transfer.ico" ?> ">
                             </a>
                         </li>
                     </ul>
