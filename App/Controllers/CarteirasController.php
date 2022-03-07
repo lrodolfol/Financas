@@ -71,7 +71,7 @@ class CarteirasController extends Controller {
             $carteiraCredito->setData($_POST['data_transferencia']);
             $carteiraCredito->setFormaPagamento(null);
             $carteiraCredito->setNome(null);
-            $carteiraCredito->setObservacao("Transferência entre carteiras. {$_POST['observacao']}");
+            $carteiraCredito->setObservacao("Transferência entre carteiras de R$ " . number_format($_POST['valor_transferencia'], 2, ',', '.') . "{$_POST['observacao']}");
             $carteiraCredito->setValor($_POST['valor_transferencia']);
 
             $carteiraDebito = clone $carteiraCredito;
