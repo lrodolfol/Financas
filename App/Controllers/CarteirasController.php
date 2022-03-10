@@ -10,6 +10,8 @@ use App\Models\Validacao\CarteiraValidador;
 
 class CarteirasController extends Controller {
 
+    private $view = 'carteiras';
+
     public function novo() {
         $formasPagamento = (new FormaPagamentoDAO())->carregaFormaPagamento("S", "DEBITAR");
         self::setViewParam('formasPagamento', $formasPagamento);
@@ -39,13 +41,42 @@ class CarteirasController extends Controller {
             Sessao::gravaMensagem("Erro ao salvar cartira: " . CarteiraValidador::$msgErro);
         }
 
-
-
         $this->novo();
     }
 
     public function index() {
-        
+        $carteiras = (new CarteirasDAO())->retornaCarteirasDistinctValor();
+        self::setViewParam('carteiras', $carteiras);
+
+        $this->render('carteiras/index');
+    }
+
+    public function relatorio() {
+        $dados = new \stdClass();
+        try {
+            foreach ($_POST as $key => $value) {
+                $dados->$key = $value;
+            }
+
+            $carteiras[] = new Carteira();
+            $cont = 0;
+            foreach ($dados as $key => $value) {
+                if($key == 'data_inicio' || $key == 'data_final'){
+                    continue;
+                }
+                $carteiras[$cont] = new Carteira();
+                $carteiras[$cont]->setNome($key);
+                $cont++;
+            }
+            
+            $relatCarteiras = (new CarteirasDAO())->relatorio($carteiras);
+            self::setViewParam('relatCarteiras', $relatCarteiras);
+            
+        } catch (Exception $ex) {
+            
+        } finally {
+            $this->index();
+        }
     }
 
     public function excluir($params) {

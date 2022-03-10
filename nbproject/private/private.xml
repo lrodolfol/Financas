@@ -3,7 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/wamp64/www/financas/App/Models/Entidades/Carteira.php</file>
+            <file>file:/C:/wamp64/www/financas/App/Views/layouts/menu.php</file>
             <file>file:/C:/wamp64/www/financas/App/Models/DAO/BaseDAO.php</file>
+            <file>file:/C:/wamp64/www/financas/App/Models/DAO/CarteirasDAO.php</file>
+            <file>file:/C:/wamp64/www/financas/App/Controllers/CarteirasController.php</file>
+            <file>file:/C:/wamp64/www/financas/App/Views/carteiras/index.php</file>
+            <file>file:/C:/wamp64/www/financas/App/Views/debito/novo.php</file>
         </group>
     </open-files>
 </project-private>

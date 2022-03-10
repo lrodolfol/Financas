@@ -101,6 +101,11 @@
                                 <img title="consultar formas de pagamento" src="<?php echo "http://" . APP_HOST . "/public/images/lupa.ico" ?> ">
                             </a>
                         </li>
+                        <li <?php if ($viewVar['nameController'] == "CarteirasController" && $viewVar['nameAction'] == "index") { ?> class="active" <?php } ?>>
+                            <a href="http://<?php echo APP_HOST; ?>/Carteiras/index" >Carteiras
+                                <img title="consultar saldo em carteiras" src="<?php echo "http://" . APP_HOST . "/public/images/dollar.ico" ?> ">
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 

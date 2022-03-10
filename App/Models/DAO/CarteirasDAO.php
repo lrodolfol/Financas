@@ -27,11 +27,40 @@ class CarteirasDAO extends BaseDAO {
         return $this->retornaObject($sql);
     }
 
-    public function retornaCarteirasDistinctValor() {
-        $sql = "SELECT nome, "
-                . " (SELECT valor FROM carteiras s WHERE s.nome = c.nome ORDER BY id DESC LIMIT 1) AS valor, "
-                . " (SELECT id FROM carteiras s WHERE s.nome = c.nome ORDER BY id DESC LIMIT 1) AS id "
-                . " FROM carteiras c  GROUP BY nome ";
+    public function retornaCarteirasDistinctValor(array $carteiras = null, 
+            string $dataInicial = null, string $dataFinal = null) {
+        $sql = "";
+
+        if (($carteiras) && ((isset($dataFinal) && isset($dataFinal) && !empty($dataInicial) && !empty($dataFinal)))) {
+            if (isset($dataFinal) && isset($dataFinal) && !empty($dataInicial) && !empty($dataFinal)) {
+                $sql = "SELECT * FROM carteiras WHERE data BETWEEN {$dataInicial} AND {$dataFinal} "
+                        . " AND nome IN ( ";
+                foreach ($carteiras as $key => $value) {
+                    $sql .= "'{$value->nome}', ";
+                }
+                $sql .= " , 'soParaCompletar_55') ";
+            }
+        } else {
+            $sql = "SELECT nome, "
+                    . " (SELECT valor FROM carteiras s WHERE s.nome = c.nome ORDER BY id DESC LIMIT 1) AS valor, "
+                    . " (SELECT id FROM carteiras s WHERE s.nome = c.nome ORDER BY id DESC LIMIT 1) AS id FROM carteiras c ";
+                    
+            if($carteiras) {
+                $sql .= " WHERE c.nome IN ( ";
+                $cont = 0;
+                foreach ($carteiras as $key => $value) {
+                    $sql .= $cont > 0 ? "," : "";
+                    
+                    $sql .= " '{$value->getnome()}' ";
+                    
+                    $cont++;
+                }
+                $sql .= ") ";
+            }
+            $sql .= "  GROUP BY nome ";
+        }
+
+
         return $this->retornaObject($sql);
     }
 
@@ -72,6 +101,12 @@ class CarteirasDAO extends BaseDAO {
         } else {
             return false;
         }
+    }
+
+    public function relatorio(array $carteiras) {
+        $relatorio = $this->retornaCarteirasDistinctValor($carteiras);
+
+        return $relatorio;
     }
 
 }
