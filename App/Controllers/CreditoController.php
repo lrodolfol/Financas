@@ -5,10 +5,12 @@ namespace App\Controllers;
 use App\Lib\Sessao;
 use App\Models\DAO\CreditoDAO;
 use App\Models\DAO\ContasReceberDAO;
+use App\Models\DAO\CaixaDAO;
+use App\Models\DAO\CarteirasDAO;
 use App\Models\Entidades\Credito;
 use App\Models\Entidades\ContasReceber;
-use App\Models\DAO\CaixaDAO;
 use App\Models\Entidades\Caixa;
+use App\Models\Entidades\Carteira;
 use App\Lib\Paginacao;
 use DateTime;
 
@@ -44,12 +46,14 @@ class CreditoController extends Controller {
     }
 
     public function novo() {
+        $carteiras = (new CarteirasDAO())->retornaCarteirasDistinctValor();
+        self::setViewParam('carteiras', $carteiras);
         $this->render('/credito/novo');
     }
 
     public function salvar() {
         $Credito = new Credito();
-        
+
         $postArray = filter_input_array(INPUT_POST, FILTER_DEFAULT);
         $Credito->setDescricao($postArray['descricao']);
         $Credito->setObservacao($postArray['observacao']);
@@ -74,10 +78,10 @@ class CreditoController extends Controller {
 
             if ($rowCredito > 0) {
                 //SE É CREDITO FIXO, ENTÃO JÁ JOGA PARA O CONTAS A RECEBER DA PRÓXIMA COMPETÊCIA.
-                if($Credito->getFixo() == 'S') {
+                if ($Credito->getFixo() == 'S') {
                     $ContasReceber = new ContasReceber();
                     $ContasReceberDAO = new ContasReceberDAO();
-                    
+
                     $ContasReceber->setAtivo($Credito->getAtivo());
                     $ContasReceber->setFixo($Credito->getFixo());
                     $ContasReceber->setDescricao($Credito->getDescricao());
@@ -90,13 +94,13 @@ class CreditoController extends Controller {
                     $soma1MesData = new \DateInterval("P1M");
                     $dataCompensacao->add($soma1MesData);
                     $ContasReceber->setDataCompensacao($dataCompensacao->format("Y-m-d"));
-                    
+
                     $ContasReceberDAO = new ContasReceberDAO();
                     $ContasReceberDAO->salvar($ContasReceber);
                 }
-                
-                
-                
+
+
+
                 $Caixa = new Caixa();
                 $Caixa->setDescricao($Credito->getObservacao());
                 $Caixa->setObs($Credito->getObservacao());
@@ -114,6 +118,21 @@ class CreditoController extends Controller {
                     //SE GRAVOU TUDO CORRETAMENTE, ENTÃO CARREGA A IMAGEM DE CREDITO
                     $rowImagemCredito = $this->carregaImagem("CREDITO", $Credito->getCodigo());
                     Sessao::gravaMensagem("Crédito gravado com sucesso. " . $rowImagemCredito . " " . $email);
+
+                    //SE GRAVOU TUDO CORRETAMENTE, ENTÃO JOGA O CREDITO NA CARTEIRA CORRETA
+                    $CarteiraDAO = new CarteirasDAO();
+                    $carteiraCredito = new Carteira();
+                    
+                    $carteiraCredito->setId($postArray['carteira_credito']);
+                    $carteiraCredito->setCodEntrada($Credito->getCodigo());
+                    $carteiraCredito->setCodSaidaCabecalho(null);
+                    $carteiraCredito->setData($Credito->getDataCadastro());
+                    $carteiraCredito->setFormaPagamento(null);
+                    $carteiraCredito->setNome(null);
+                    $carteiraCredito->setObservacao("Crédito de " . number_format($Credito->getValor(), 2, ',', '.') . " {$Credito->getDescricao()}");
+                    $carteiraCredito->setValor($Credito->getValor());
+                    
+                    $CarteiraDAO->creditar($carteiraCredito);
                 } else {
                     Sessao::gravaErro("Ocorreu um eror ao inserir o crédito na caixa" . " " . $email);
                 }

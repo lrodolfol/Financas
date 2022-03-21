@@ -27,8 +27,7 @@ class CarteirasDAO extends BaseDAO {
         return $this->retornaObject($sql);
     }
 
-    public function retornaCarteirasDistinctValor(array $carteiras = null, 
-            string $dataInicial = null, string $dataFinal = null) {
+    public function retornaCarteirasDistinctValor(array $carteiras = null, string $dataInicial = null, string $dataFinal = null) {
         $sql = "";
 
         if (($carteiras) && ((isset($dataFinal) && isset($dataFinal) && !empty($dataInicial) && !empty($dataFinal)))) {
@@ -44,15 +43,15 @@ class CarteirasDAO extends BaseDAO {
             $sql = "SELECT nome, "
                     . " (SELECT valor FROM carteiras s WHERE s.nome = c.nome ORDER BY id DESC LIMIT 1) AS valor, "
                     . " (SELECT id FROM carteiras s WHERE s.nome = c.nome ORDER BY id DESC LIMIT 1) AS id FROM carteiras c ";
-                    
-            if($carteiras) {
+
+            if ($carteiras) {
                 $sql .= " WHERE c.nome IN ( ";
                 $cont = 0;
                 foreach ($carteiras as $key => $value) {
                     $sql .= $cont > 0 ? "," : "";
-                    
+
                     $sql .= " '{$value->getnome()}' ";
-                    
+
                     $cont++;
                 }
                 $sql .= ") ";
@@ -100,6 +99,20 @@ class CarteirasDAO extends BaseDAO {
             return $this->insertSubquery($sql);
         } else {
             return false;
+        }
+    }
+
+    public function creditar(Carteira $carteiraCredito) {
+        $idCredito = $carteiraCredito->getId();
+        $data = $carteiraCredito->getData();
+        $valor = $carteiraCredito->getValor();
+        $observacao = $carteiraCredito->getObservacao();
+
+        $sql = " INSERT INTO carteiras (nome,data,valor,forma_pagamento,cod_saida_cabecalho,cod_entrada, observacao) "
+                . " SELECT nome, '{$data}', valor + {$valor}, forma_pagamento, 0, 0, '{$observacao}' "
+                . " FROM {$carteiraCredito::$table} WHERE id = {$idCredito} ";
+        if ($this->insertSubquery($sql)) {
+            return true;
         }
     }
 

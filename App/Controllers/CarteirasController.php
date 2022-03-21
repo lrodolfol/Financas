@@ -10,8 +10,6 @@ use App\Models\Validacao\CarteiraValidador;
 
 class CarteirasController extends Controller {
 
-    private $view = 'carteiras';
-
     public function novo() {
         $formasPagamento = (new FormaPagamentoDAO())->carregaFormaPagamento("S", "DEBITAR");
         self::setViewParam('formasPagamento', $formasPagamento);

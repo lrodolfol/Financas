@@ -1,3 +1,6 @@
+<?php
+$carteiras = $viewVar['carteiras'];
+?>
 <div class="container">
     <div class="row">
         <div class="col-md-3"></div>
@@ -19,6 +22,13 @@
                     </div>
 
                     <div class="row">
+                        <div class="col-md-12">
+
+                        </div>
+                    </div>
+
+
+                    <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="quantidade">Valor</label>
@@ -33,7 +43,20 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                               <label for="arquivo">Imagem comprovante</label>
+                                <label for="carteira_credito">Creditar em: </label>
+                                <select class="form-control" for="carteira_credito" name="carteira_credito" required>
+                                    <option></option>
+                                    <?php foreach ($carteiras as $carteira) { ?>
+                                        <option value="<?= $carteira->id; ?>">
+                                            <?= ($carteira->nome) . ' R$' . number_format($carteira->valor, 2, ',', '.'); ?>
+                                        </option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="arquivo">Imagem comprovante</label>
                                 <input type="file" class="form-control-file" name="arquivo_imagem">
                             </div>
                         </div>
@@ -44,7 +67,7 @@
                         </div>
                     </div>
                     <div class="row">
-						<div class="col-md-5">
+                        <div class="col-md-5">
                             <div class="form-group">
                                 <label for="fixo">Lucro Real</label>
                                 <input type="checkbox" name="lucroReal" value="lucroReal" >
