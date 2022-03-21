@@ -78,10 +78,10 @@
             if ($viewVar['exportadoXML'] && $viewVar['exportadoXML'] == "TRUE") {
                 $caminhoSalvarXML = RAIZ_SITE . "/public/usuarios/" . \App\Lib\Sessao::retornaUsuario() . "/backup_conta/XML";
                 $arquivoXML = $caminhoSalvarXML . "/financas_" . \App\Lib\Sessao::retornaUsuario() . "_" . $dataBackup . ".xml";
-                ?><a href="http://kellyerodolfo.com.br/financas/public/usuarios/<?php echo App\Lib\Sessao::retornaUsuario(); ?>/backup_conta/XML/financas_<?php echo App\Lib\Sessao::retornaUsuario(); ?>_<?php echo $dataBackup; ?>.xml" download="financas" class="btn btn-info btn-sm">Baixar</a><?php
+                ?><a href="http://tinosnegocios.com.br/financas/public/usuarios/<?php echo App\Lib\Sessao::retornaUsuario(); ?>/backup_conta/XML/financas_<?php echo App\Lib\Sessao::retornaUsuario(); ?>_<?php echo $dataBackup; ?>.xml" download="financas" class="btn btn-info btn-sm">Baixar</a><?php
             }
             if ($viewVar['exportadoJSON'] && $viewVar['exportadoJSON'] == "TRUE") {
-                ?><a href="http://kellyerodolfo.com.br/financas/public/usuarios/<?php echo App\Lib\Sessao::retornaUsuario(); ?>/backup_conta/JSON/financas_<?php echo App\Lib\Sessao::retornaUsuario(); ?>_<?php echo $dataBackup; ?>.json" download="financas" class="btn btn-info btn-sm">Baixar</a><?php
+                ?><a href="http://tinosnegocios.com.br/financas/public/usuarios/<?php echo App\Lib\Sessao::retornaUsuario(); ?>/backup_conta/JSON/financas_<?php echo App\Lib\Sessao::retornaUsuario(); ?>_<?php echo $dataBackup; ?>.json" download="financas" class="btn btn-info btn-sm">Baixar</a><?php
             }
             ?>
         </div>
