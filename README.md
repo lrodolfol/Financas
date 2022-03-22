@@ -7,6 +7,9 @@
   <h4 align="center"> 
 	🚧  Em construção...  🚧
 </h4>
+
+Não segue padrão de código e nem todas partes do projeto há uso de boas práticas. Esta criação é para uso pessoal e para realização de novas funcionalidade e estudos diários.
+
 </p>
 
 ## Instalação
@@ -45,7 +48,7 @@ Feito sobre estrutura MVC POO com funcionalidades básicas como:
     - Alteração para base de teste e produção
     - Exportação da conta em aquivos (JSON, XML e CSV(em construção) )
     - Bloqueio de competência
-    
+  
 ## Tecnologias Usadas
 - [PHP7](https://www.php.net/)
 - [HTML 5](https://developer.mozilla.org/pt-BR/docs/Web/HTML)
