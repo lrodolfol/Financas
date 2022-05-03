@@ -13,7 +13,11 @@ require_once("vendor/autoload.php");
 
 /* IRA LER O AR */
 $baseConexao = "";
-define("TXT_BANCO", $_SERVER['DOCUMENT_ROOT'] . "\\financas\\banco-conexao.txt"); //RECUPERA O DIRETORIO DO ARQUIVO
+
+//USE THIS IF NOT EXISTS SUB PATH IN PROJECT
+//define("TXT_BANCO", $_SERVER['DOCUMENT_ROOT'] . "\\financas\\banco-conexao.txt"); //RECUPERA O DIRETORIO DO ARQUIVO
+
+define("TXT_BANCO", $_SERVER['DOCUMENT_ROOT'] . "\\banco-conexao.txt"); //RECUPERA O DIRETORIO DO ARQUIVO
 if(is_file(TXT_BANCO)){            
     $arquivo = fopen(TXT_BANCO, "r");    			  //FAZ A ABERTURA DO ARQUIVO 'r' SOMENTE PARA LEITURA
     $tamanho = filesize(TXT_BANCO);    				  //RECUPERA O TAMANHO DO ARQUIVO EM QUESTÃO

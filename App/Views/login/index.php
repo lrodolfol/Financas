@@ -1,7 +1,7 @@
 <div class="container">
     <div class="centro-tela">
         <div class="starter-template">
-            <h1><?php echo 'Página de Login'; ?></h1>
+            <h1><?php echo 'Página de Login - Finanças'; ?></h1>
             <label>
                 <form action="http://<?php echo APP_HOST; ?>/login/logar" method="post" id="form_cadastro">
                     <div class="form-group">
