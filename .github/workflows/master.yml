@@ -16,5 +16,5 @@ jobs:
         with:
           server: ftp.tinosnegocios.com.br
           username: rodolfo@tinosnegocios.com.br
-          password: #Sojesussalva1
+          password: Sojesussalva1
           server-dir: public_html/financas/
