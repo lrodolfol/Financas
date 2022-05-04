@@ -14,7 +14,7 @@ jobs:
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.3.0
         with:
-          server: ftp.tinosnegocios.com.br
-          username: rodolfo@tinosnegocios.com.br
+          server: ${{ SECRETS.FTP_HOST }}
+          username: ${{ SECRETS.FTP_USER }}
           password: ${{ SECRETS.FTP_PASSWORD }}
           server-dir: public_html/financas/
