@@ -16,5 +16,5 @@ jobs:
         with:
           server: ftp.tinosnegocios.com.br
           username: rodolfo@tinosnegocios.com.br
-          password: ${{ SECRETS.FTP_PASS || github.token }}
+          password: ${{ SECRETS.FTP_PASSWORD }}
           server-dir: public_html/financas/
