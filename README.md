@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://pypi.org/project/pycep-correios/">
+  <a href="">
     <img src="https://www.php.net/images/logos/php-logo.svg" width="30%">
   </a>
   <h3 align="center">Sistema Finanças</h3>
