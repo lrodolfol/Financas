@@ -165,16 +165,22 @@
                                 <img title="rodar rotina automatica" src="<?php echo "http://" . APP_HOST . "/public/images/service.ico" ?> ">
                             </a>
                         </li>
-                        <li <?php if ($viewVar['nameController'] == "FormaPagamentoController" && $viewVar['nameAction'] == "index") { ?> class="active" <?php } ?>>
-                            <a href="javascript:popup()">
-                                Calculadora
-                                <img title="abrir calculadora simples" src="<?php echo "http://" . APP_HOST . "/public/images/calculator.ico" ?> ">
-                            </a>
-                        </li>
                         <li <?php if ($viewVar['nameController'] == "CarteirasControlle" && $viewVar['nameAction'] == "transferencia") { ?> class="active" <?php } ?>>
                             <a href="http://<?php echo APP_HOST; ?>/Carteiras/transferencia" >
                                 Transf carteiras
                                 <img title="Transferência entre carteiras" src="<?php echo "http://" . APP_HOST . "/public/images/wllet-transfer.ico" ?> ">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="http://<?php echo APP_HOST; ?>/Home/importarMovimentacoes" >
+                                Importar Movimentações
+                                <img title="Transferência entre carteiras" src="<?php echo "http://" . APP_HOST . "/public/images/csv.ico" ?> ">
+                            </a>
+                        </li>
+                        <li <?php if ($viewVar['nameController'] == "FormaPagamentoController" && $viewVar['nameAction'] == "index") { ?> class="active" <?php } ?>>
+                            <a href="javascript:popup()">
+                                Calculadora
+                                <img title="abrir calculadora simples" src="<?php echo "http://" . APP_HOST . "/public/images/calculator.ico" ?> ">
                             </a>
                         </li>
                     </ul>
