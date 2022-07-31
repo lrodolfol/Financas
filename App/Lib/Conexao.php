@@ -40,7 +40,8 @@ class Conexao {
         $pdoConfig = "mysql:" . "host=localhost;";
         //$pdoConfig .= "dbname=financas;";
         //echo strpos(PATH, 'wamp64'); die();
-        if ( (strpos(PATH, 'wamp64') || strpos(PATH, 'htdocs')) && BASE_DADOS_OPERANTE ==  "LOCAL") {
+        //if ( (strpos(PATH, 'wamp64') || strpos(PATH, 'htdocs')) && BASE_DADOS_OPERANTE ==  "LOCAL") {
+        if (BASE_DADOS_OPERANTE ==  "LOCAL") {
             $pdoConfig .= "dbname=financas;";
         } else {
             $pdoConfig .= "dbname=tinosn76_financas;";   //TROCAR SEMPRE QUE MUDAR DE SERVIDOR DE HOSPEDAGEM

@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Lib\Sessao;
 use App\Lib\functions;
+use App\Models\DAO\CarteirasDAO;
 use App\Models\DAO\UsuarioDAO;
 use App\Models\DAO\HomeDAO;
 use App\Models\DAO\CreditoDAO;
@@ -14,6 +15,7 @@ use App\Models\DAO\EstabelecimentoDAO;
 use App\Models\DAO\ContasReceberDAO;
 use App\Models\DAO\CaixaDAO;
 use App\Models\DAO\ContaDAO;
+use App\Models\Entidades\Carteira;
 use App\Models\Entidades\Usuario;
 use App\Models\Entidades\RelatoErro;
 use App\Models\Entidades\Email;
@@ -42,10 +44,11 @@ class ContaController extends Controller {
         $this->extensao = strrchr($_FILES['arquivo_importacao']['name'], '.');
         $this->extensoesPermitidas = array('.XML', '.JSON', '.CSV');
 
-        $this->nomeTabelas = array("entradas", "estabelecimentos", "formas_pagamento", "caixa", "saida_cabecalho", "saidas_itens", "lancamentos_futuros", "lancamentos_futuros_itens", "contas_receber");
+        $this->nomeTabelas = array("entradas", "estabelecimentos", "carteiras", "formas_pagamento", "caixa", "saida_cabecalho", "saidas_itens", "lancamentos_futuros", "lancamentos_futuros_itens", "contas_receber");
         $this->tabelas = array(
             /* ENTRADAS */ array("codigo", "descricao", "obs", "valor", "ativo", "fixo", "data"),
             /* ESTAB */ array("codigo", "nome", "cnpj", "tipo_comercio", "cidade", "ativo"),
+            /* CARTEIRAS */ array ("nome", "valor", "data", "forma_pagamento", "codigo_saida_cabecalho", "cod_entrada", "observacao"),
             /* FORM PAG */ array("codigo", "descricao", "ativo", "dia_fechamento", "dia_vencimento"),
             /* CAIXA */ array("descricao", "obs", "ativo", "saldo", "data", "codigo_saida_cabecalho", "codigo_entrada"),
             /* SAIDA CABEÇ */ array("codigo", "data_compra", "data_debito", "valor_total", "estabelecimento", "forma_pagamento", "qtd_parcelas", "ativo", "fixo", "obs", "juros", "total_geral", "desconto"),
@@ -58,6 +61,7 @@ class ContaController extends Controller {
         $this->tipoTabelas = array(
             /* ENTRADAS */ array("int", "char", "char", "int", "char", "char", "char"),
             /* ESTAB */ array("int", "char", "cnpj", "char", "char", "char"),
+            /* CARTEIRAS */ array("char", "int", "char", "int", "int", "int", "char"),
             /* FORM PAG */ array("int", "char", "char", "char", "char"),
             /* CAIXA */ array("char", "char", "char", "int", "char", "int", "int"),
             /* SAIDA CABEÇ */ array("int", "char", "char", "int", "int", "int", "int", "char", "char", "char", "int", "int"),
@@ -262,6 +266,7 @@ class ContaController extends Controller {
         $tabelas[7] = isset($_POST['formaPagamento']) ? "formas_pagamento" : "";
         $tabelas[8] = isset($_POST['caixa']) ? "caixa" : "";
         $tabelas[9] = isset($_POST['contasReceber']) ? "contas_receber" : "";
+        $tabelas[10] = isset($_POST['carteiras']) ? "carteiras" : "";
         $tipoArquivo = $_POST['tipoArquivo'];
 
         if (count($tabelas) > 0 && isset($tipoArquivo)) {
@@ -296,9 +301,13 @@ class ContaController extends Controller {
                 Sessao::gravaMensagem("Informe pelo menos um cadastro e um tipo de aruivo para exportação");
             }
         } else {
-            Sessao::gravaMensagem("Informe pelo menos um cadastro e um tipo de aruivo para exportação");
+            Sessao::gravaMensagem("Informe pelo menos um cadastro e um tipo de arquivo para exportação");
         }
+<<<<<<< HEAD
        
+=======
+
+>>>>>>> f15381609d0b3ff767636da4c93dce50dea996f3
         if (!$zerandoConta) {
             $exportar = ($this->render("home/exportarConta"));
         }
@@ -833,6 +842,7 @@ class ContaController extends Controller {
         $formaPagamentoDAO = new FormaPagamentoDAO();
         $caixaDAO = new CaixaDAO();
         $contasReceberDAO = new ContasReceberDAO();
+        $carteiraDAO = new CarteirasDAO();
 
         $camposEntrada = array("codigo", "descricao", "obs", "valor", "ativo", "fixo", "data");
         $camposEstabelecimentos = array("codigo", "nome", "cnpj", "tipo_comercio", "cidade", "ativo");
@@ -843,6 +853,7 @@ class ContaController extends Controller {
         $camposLancamentosFuturos = array("codigo", "data_compra", "data_debito", "valor_total", "estabelecimento", "forma_pagamento", "qtd_parcelas", "ativo", "fixo", "obs", "juros", "total_geral");
         $camposLancamentosFuturosItens = array("codigo", "codigo_cabecalho", "produto", "qtd_produto", "valor_produto", "ativo", "unidade_medida");
         $camposContaReceber = array("codigo", "descricao", "obs", "valor", "ativo", "fixo", "data_compensacao", "creditado");
+        $camposCarteira = array("nome", "valor", "data", "forma_pagamento", "cod_saida_cabecalho","cod_entrada", "observacao");
 
         $entradas = "";
         $estabelecimentos = "";
@@ -869,8 +880,6 @@ class ContaController extends Controller {
         }
         $json = substr($json, 0, strlen($json) - 1);
         $json .= "]";
-
-
 
         //===============ESTABELECIMENTOS==============
         if (strtoupper($tabelas[6]) == "ESTABELECIMENTOS") {
@@ -910,6 +919,31 @@ class ContaController extends Controller {
                         break;
                     }
                     $tabelajson .= '"' . $camposFormaPagamento[$cont] . '": ' . '"' . $value[$camposFormaPagamento[$cont]] . '",';
+                    $cont++;
+                }
+                $tabelajson .= '},';
+                $json .= $tabelajson;
+                $tabelajson = "";
+            }
+            $json = substr($json, 0, strlen($json) - 1);
+            $json .= "]";
+        }
+
+        //==============CARTEIRA======================
+        if(strtoupper($tabelas[10]) == "CARTEIRAS") {
+            $carteira = $carteiraDAO->retornaCarteiras();
+            $json .= ",";
+            $json .= '"carteiras":' . '[';
+            foreach ($carteira as $key => $value) {
+                $tabelajson .= '{';
+                $cont = 0;
+                $arrayObjCarteira = is_object($value) ?  get_object_vars($value) : $value;
+                foreach ($arrayObjCarteira as $valor) {
+                    if ($cont >= count($camposCarteira)) {
+                        $tabelajson = substr($tabelajson, 0, strlen($tabelajson) - 1);
+                        break;
+                    }
+                    $tabelajson .= '"' . $camposCarteira[$cont] . '": ' . '"' . str_replace('"', "'", $arrayObjCarteira[$camposCarteira[$cont]]) . '",';
                     $cont++;
                 }
                 $tabelajson .= '},';

@@ -48,6 +48,12 @@
                             <input type="checkbox"  name="formaPagamento">
                         </div>
                     </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="debito">Carteiras</label>
+                            <input type="checkbox"  name="carteiras">
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
