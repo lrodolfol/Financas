@@ -251,6 +251,7 @@ class ContaController extends Controller {
     }
 
     public function exportaConta($zerandoConta = false) {
+        
         $tabelas = array();
         $tabelas[1] = isset($_POST['credito']) ? "entradas" : "";
         $tabelas[2] = isset($_POST['debito']) ? "saida_cabecalho" : "";
@@ -297,6 +298,7 @@ class ContaController extends Controller {
         } else {
             Sessao::gravaMensagem("Informe pelo menos um cadastro e um tipo de aruivo para exportação");
         }
+       
         if (!$zerandoConta) {
             $exportar = ($this->render("home/exportarConta"));
         }

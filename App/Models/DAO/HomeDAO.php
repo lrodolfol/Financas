@@ -25,10 +25,19 @@ class HomeDAO extends BaseDAO {
     }
 
     public function mostraSaldo($id = null) {
+        $mesAnterior = new \DateTime();
+        $interval = new \DateInterval('P1M');
+        $mesAnterior = $mesAnterior->sub($interval);
+        $mesAnterior = $mesAnterior->format('Y-m');
+
         $sql = "select coalesce(sum(valor),0)  - "
                 . " ( select coalesce(sum(valor_total),0) from saida_cabecalho where  "
                 . " extract(month from data_debito) = extract(month from current_date()) AND extract(year from data_debito) = extract(year from current_date() ) ) as lucro, "
-                . " (SELECT saldo FROM caixa  WHERE data <= current_date() AND ativo = 'S' ORDER BY id DESC LIMIT 1) as saldo "
+                . " (SELECT saldo FROM caixa  WHERE data <= current_date() AND ativo = 'S' ORDER BY id DESC LIMIT 1) as saldo, "
+                . " (select coalesce(sum(valor),0) from entradas where "
+                . " '" . $mesAnterior . "' = "
+                . " concat( extract(year from data), '-', lpad(extract(month from data),2, '0') ) "
+                . " AND extract(year from data) = extract(year from current_date()) and lucro_real = 'S') as lucro_real "
                 . " from  entradas where extract(month from data) = extract(month from current_date()) AND extract(year from data) = extract(year from current_date()) ; ";
         //$resultado = $this->RetornaDado("SELECT saldo FROM caixa  WHERE data <= current_date() AND ativo = 'S' ORDER BY id DESC LIMIT 1 ");
         $resultado = $this->RetornaDado($sql);

@@ -1,6 +1,7 @@
 <?php
 $saldo = $viewVar["mostraSaldo"]["saldo"];
 $lucro = $viewVar["mostraSaldo"]["lucro"];
+$lucroReal = $viewVar["mostraSaldo"]["lucro_real"];
 $saldoProximoMes = $viewVar['proximoMes'];
 $corSaldo = "";
 $corLucro = "";
@@ -17,10 +18,14 @@ if ($lucro < 0) {
     $corLucro = "blue";
 }
 $evolucaoValor = 0;
+
+$dizimo = function($valor) {
+    $percentualDizimo = 10;
+    return ( ( $valor / 100) * $percentualDizimo);
+};
 $formataValor = function($valor) {
     return number_format($valor, 2, ',', '.');
 };
-
 $retornaValorPorcentagem = function($valorMesAnterior, $valorMesAtual) {
     if(! isset($valorMesAnterior)) {
         $valorMesAnterior = $valorMesAtual;
@@ -55,20 +60,29 @@ $retornaValorPorcentagem = function($valorMesAnterior, $valorMesAtual) {
 
         <div class="col-md-12">
             <h2><?php echo 'Bem vindo, ' . ucfirst($usuarioLogado) . ".	"; ?></h2>
-            <p>Você tem em caixa um valor total de R$
-                <i style="color: <?php echo $corSaldo; ?>">
-                    <?php echo $formataValor($saldo); ?>
-                </i>
-                <i>
-                    <?php echo "(" . $formataValor($saldoProximoMes) . ") para o próximo mês " ?>
-                </i>
-            </p>
+            <div class="col-md-10">
+                <p>Você tem em caixa um valor total de R$
+                    <i style="color: <?php echo $corSaldo; ?>">
+                        <?php echo $formataValor($saldo); ?>
+                    </i>
+                    <i>
+                        <?php echo "(" . $formataValor($saldoProximoMes) . ") para o próximo mês " ?>
+                    </i>
+                </p>
 
-            <p>Esse mês você esta com um saldo <?php echo $lucro >= 0 ? "positivo" : "negativo"; ?> 
-                de R$ 
-                <i style="color: <?php echo $corLucro; ?>">
-                    <?php echo $formataValor($lucro); ?> 
-                </i> (R$ de entrada - R$ de saida desse mês)  </p>
+                <p>Esse mês você esta com um saldo <?php echo $lucro >= 0 ? "positivo" : "negativo"; ?>
+                    de R$
+                    <i style="color: <?php echo $corLucro; ?>">
+                        <?php echo $formataValor($lucro); ?>
+                    </i> (R$ de entrada - R$ de saida desse mês)  </p>
+            </div>
+
+            <div class="col-md-2">
+                <p>Dizimo: R$
+                    <i style="color: <?php echo $corLucro; ?>">
+                        <?php echo number_format($dizimo($lucroReal), 2, ',', '.'); ?>
+                    </i>
+            </div>
 
         </div>
 
