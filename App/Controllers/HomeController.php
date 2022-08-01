@@ -48,9 +48,7 @@ class HomeController extends Controller {
         $this->render('home/index');
     }
 
-    public function importarMovimentacoes() {
-        echo 'Importando';
-    }
+
 
     public function mudaBase($baseParaMudar) {
         if ($baseParaMudar[0] == "P") {

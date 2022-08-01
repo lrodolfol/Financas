@@ -43,7 +43,10 @@ class ContaController extends Controller {
         $this->erro = $_FILES["arquivo_importacao"]["error"];
         $this->extensao = strrchr($_FILES['arquivo_importacao']['name'], '.');
         $this->extensoesPermitidas = array('.XML', '.JSON', '.CSV');
-
+        $this->layoutCsvMovimentacao = array (
+            "data_compra","valor_debito","valor_juros", "valor_desconto", "estabelecimento", "forma_pagamento",
+            "repetir_n_meses","ativo","atipico","obs","produto","quantidade","und","valor"
+        );
         $this->nomeTabelas = array("entradas", "estabelecimentos", "carteiras", "formas_pagamento", "caixa", "saida_cabecalho", "saidas_itens", "lancamentos_futuros", "lancamentos_futuros_itens", "contas_receber");
         $this->tabelas = array(
             /* ENTRADAS */ array("codigo", "descricao", "obs", "valor", "ativo", "fixo", "data"),
@@ -70,6 +73,44 @@ class ContaController extends Controller {
             /* LANÇ. ITEN */ array("int", "int", "char", "int", "int", "char", "char"),
             /* CONTAS RECEBER */ array("int", "char", "char", "int", "char", "char", "char", "char"),
         );
+    }
+
+    public function importarMovimentacoes() {
+        $this->render("home/importaPlanilhaMovimentacoes");
+    }
+    public function uploadPlanilhaMovimentacoes() {
+        if(!in_array(strtoupper($this->extensao), $this->extensoesPermitidas) == true){
+            Sessao::gravaErro("Escolha um arquivo em formato CSV");
+            echo 'Erro';
+        }else{
+            if (($handle = fopen($this->arquivoNomeTemp, "r")) !== FALSE) {
+                $row = 0;
+                $cabecalho = null;
+                while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                    $num = count($data);
+
+
+                    if($row == 0) {
+                        $cabecalho = explode(";", strtolower(trim($data[0])));
+
+                        for($i = 0; $i < count($cabecalho); $i++){
+                            if( strtolower(trim($cabecalho[$i])) != $this->layoutCsvMovimentacao[$i]) {
+                                echo 'dif';
+                            }else{
+                                echo 'igual';
+                            }
+                        }
+                    }
+
+
+                    for ($c=0; $c < $num; $c++) {
+                        echo $data[$c] . "<br />\n";
+                    }
+                    $row++;
+                }
+                fclose($handle);
+            }
+        }
     }
 
     public function importarConta() {
@@ -303,11 +344,6 @@ class ContaController extends Controller {
         } else {
             Sessao::gravaMensagem("Informe pelo menos um cadastro e um tipo de arquivo para exportação");
         }
-<<<<<<< HEAD
-       
-=======
-
->>>>>>> f15381609d0b3ff767636da4c93dce50dea996f3
         if (!$zerandoConta) {
             $exportar = ($this->render("home/exportarConta"));
         }

@@ -172,7 +172,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="http://<?php echo APP_HOST; ?>/Home/importarMovimentacoes" >
+                            <a href="http://<?php echo APP_HOST; ?>/Conta/importarMovimentacoes" >
                                 Importar Movimentações
                                 <img title="Transferência entre carteiras" src="<?php echo "http://" . APP_HOST . "/public/images/csv.ico" ?> ">
                             </a>
