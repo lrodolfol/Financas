@@ -78,38 +78,40 @@ class ContaController extends Controller {
     public function importarMovimentacoes() {
         $this->render("home/importaPlanilhaMovimentacoes");
     }
+
     public function uploadPlanilhaMovimentacoes() {
+        $msg = $this->leUploadPlanilhaMovimentacoes();
+
+        if($msg != "success") {
+            Sessao::gravaErro($msg);
+        }else{
+
+        }
+
+    }
+    private function leUploadPlanilhaMovimentacoes() : string {
         if(!in_array(strtoupper($this->extensao), $this->extensoesPermitidas) == true){
-            Sessao::gravaErro("Escolha um arquivo em formato CSV");
-            echo 'Erro';
+            return "Escolha um arquivo em formato CSV";
         }else{
             if (($handle = fopen($this->arquivoNomeTemp, "r")) !== FALSE) {
-                $row = 0;
-                $cabecalho = null;
-                while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-                    $num = count($data);
-
-
-                    if($row == 0) {
-                        $cabecalho = explode(";", strtolower(trim($data[0])));
-
-                        for($i = 0; $i < count($cabecalho); $i++){
-                            if( strtolower(trim($cabecalho[$i])) != $this->layoutCsvMovimentacao[$i]) {
-                                echo 'dif';
-                            }else{
-                                echo 'igual';
-                            }
-                        }
+                $cont = 0;
+                $cabecalho = "";
+                while(! feof($handle)) {
+                    $line = fgetcsv($handle);
+                    if($cont == 0) {
+                        $cabecalho = explode(";", $line[0]);
+                        //POR ALGUM MOTIVO A 1º COLUNA DO CSV ESTA VINDO COM CARACTER ESPECIAL E NÃO CONSEGUI TIRAR
+                        //ZWNBSP
                     }
 
 
-                    for ($c=0; $c < $num; $c++) {
-                        echo $data[$c] . "<br />\n";
-                    }
-                    $row++;
+                    $cont ++;
                 }
+
                 fclose($handle);
             }
+
+            return "success";
         }
     }
 
