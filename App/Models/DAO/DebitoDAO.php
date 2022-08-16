@@ -104,7 +104,6 @@ class DebitoDAO extends BaseDAO {
 
     public function salvar(Debito $debito) {
         try {
-
             $dataCompra = $debito->getDataCompra();
             $dataDebito = $debito->getDataDebito();
             $valorTotal = $debito->getValorTotal();
@@ -152,6 +151,71 @@ class DebitoDAO extends BaseDAO {
             );
         } catch (\Exception $e) {
             throw new \Exception("Erro na gravação de dados.", 500);
+        }
+    }
+
+    public function salvarDebitosArray($debitos) {
+        foreach ($debitos as $debito) {
+
+            if(empty($debito->getDataCompra())) {
+                continue;
+            }
+
+            try {
+                $dataCompra = $debito->getDataCompra();
+                $dataDebito = $debito->getDataDebito();
+                $valorTotal = $debito->getValorTotal();
+                $estabelecimento = $debito->getEstabelecimento();
+                $formaPagamento = $debito->getFormaPagamento();
+                $qdtParcelas = $debito->getQtdParcelas();
+                $ativo = $debito->getAtivo();
+                $atipico = $debito->getAtipico();
+                $fixo = ( $debito->getFixo() ? $debito->getFixo() : 0 );
+                $observacao = $debito->getObs();
+                $juros = $debito->getJuros();
+                $desconto = ($debito->getDesconto() ? $debito->getDesconto() : 0);
+                $totalGeral = ($valorTotal + $juros) - $desconto;
+                $totalGeral = $totalGeral >= 0 ? $totalGeral : 0; //TOTAL NUNCA SERÁ NEGATIVO
+
+                if (empty($codigo)) {
+                    $row = $this->RetornaDado("SELECT codigo FROM saida_cabecalho ORDER BY codigo DESC LIMIT 1");
+                    if (!$row) {
+                        $codigo = 1;
+                    } else {
+                        $codigo = $row["codigo"] + 1;
+                    }
+                }
+                $debito->setCodigo($codigo);
+
+                $result = $this->insert(
+                    'saida_cabecalho',
+                    "codigo,:data_compra,:data_debito,:valor_total,:estabelecimento,:forma_pagamento,:qtd_parcelas,:ativo,:obs,:fixo,:juros,:total_geral,:desconto,:atipico",
+                    [
+                        ':codigo' => $codigo,
+                        ':data_compra' => "'" . $dataCompra . "'",
+                        ':data_debito' => "'" . $dataDebito . "'",
+                        ':valor_total' => $valorTotal,
+                        ':estabelecimento' => "'" . $estabelecimento . "'",
+                        ':forma_pagamento' => $formaPagamento,
+                        ':qtd_parcelas' => $qdtParcelas,
+                        ':ativo' => "'" . $ativo . "'",
+                        ':obs' => "'" . $observacao . "'",
+                        ':fixo' => "" . $fixo . "",
+                        ':juros' => $juros,
+                        ':total_geral' => $totalGeral,
+                        ':desconto' => $desconto,
+                        ':atipico' => "'" . $atipico . "'",
+                    ]
+                );
+
+                if($result) {
+                    $debito->setCodigoCabecalho($codigo);
+                    $this->salvarItens($debito);
+                }
+
+            } catch (\Exception $e) {
+                throw new \Exception("Erro na gravação de dados.", 500);
+            }
         }
     }
 
