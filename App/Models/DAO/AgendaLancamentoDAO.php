@@ -22,6 +22,131 @@ class AgendaLancamentoDAO extends BaseDAO {
         return $resultado->fetchAll();
     }
 
+    public function agendaLancamentoArray($AgendaLancamentosArray){
+        foreach ($AgendaLancamentosArray as $AgendaLancamento) {
+            try {
+                $functions = new functions();
+                //CALCULO DO DIA DE DEBITO DO LANÇAMENTO SOMENTE SE HÁ DIA DE FECHAMENTO E FECHAMENTO PARA O DEBITO. SENÃO SERÁ A DATA INFORMADA PELO USUÁRIO
+                if ($AgendaLancamento->getDiaFechamento() && $AgendaLancamento->getDiaVencimento()) {
+
+                    /* $dataCompra = getdate(strtotime($AgendaLancamento->getDataCompra()));
+                      $dia = $dataCompra["mday"];
+                      $mes = $dataCompra["mon"];
+                      $ano = $dataCompra["year"];
+                      $dataHoje = new DateTime();
+                      $dataVencimento = date("Y/m/d", strtotime("+1month"));
+
+                      $dataVencimento = date("Y-m-d", strtotime("+1 month", strtotime($dataCompra))); */
+
+                    $dataCompra = getdate(strtotime($AgendaLancamento->getDataCompra()));
+                    $dia = $dataCompra["mday"];
+                    $mes = $dataCompra["mon"];
+                    $ano = $dataCompra["year"];
+
+                    $diaFatura = $AgendaLancamento->getDiaVencimento() . "-" . $mes . "-" . $ano;
+                    $diaCompra = $dia . "-" . $mes . "-" . $ano;
+                    $diaFatura = date("Y-m-d", strtotime("+1 month", strtotime($diaFatura)));
+                    $diaFaturaM7Dias = date("Y-m-d", strtotime("-7 days", strtotime($diaFatura)));
+
+                    $diaFatura = new DateTime($diaFatura);
+                    $diaFaturaM7Dias = new DateTime($diaFaturaM7Dias);
+                    $diaCompra = new DateTime($diaCompra);
+
+                    if($diaCompra->format('d') >= $diaFaturaM7Dias->format('d') ) {
+                        $diaFatura = date("Y-m-d", strtotime("+1 month", strtotime($diaFatura->format('Y-m-d'))));
+                        //$diaFatura = new DateTime($diaFatura);
+                    }
+
+                    /* if ($AgendaLancamento->getDiaVencimento() > $AgendaLancamento->getDiaFechamento()) {
+                         $diaFatura = date("Y-m-d", strtotime("+1 month", strtotime($diaFatura)));
+                     } else {
+                         if ($AgendaLancamento->getDiaFechamento() < $dia) {
+                             //$diaFatura = $AgendaLancamento->getDiaVencimento() . "-" . $mes . "-" . $ano;
+                             $diaFatura = date("Y-m-d", strtotime("+1 month", strtotime($diaFatura)));
+                         } else {
+                             //$diaFatura = $AgendaLancamento->getDiaVencimento() . "-" . $mes . "-" . $ano;
+                             $diaFatura = date("Y-m-d", strtotime("+0 month", strtotime($diaFatura)));
+                         }
+                     }
+                     if ($AgendaLancamento->getDiaVencimento() < date('d', $AgendaLancamento->getDataCompra())) {
+                         $diaFatura = date("Y-m-d", strtotime("+0 month", strtotime($diaFatura)));
+                     }*/
+                }
+
+                //PEGA O DIA DE DEBITO DO LANÇAMENTO SOMENTE SE HÁ DIA DE FECHAMENTO E FECHAMENTO PARA O DEBITO. SENÃO SERÁ A DATA INFORMADA PELO USUÁRIO
+                $dataDebito = isset($diaFatura) ? $diaFatura : $AgendaLancamento->getDataDebito();
+                $parcelas = $AgendaLancamento->getQtdParcelas();
+
+                $row = $this->RetornaDado("SELECT codigo FROM lancamentos_futuros ORDER BY codigo DESC LIMIT 1");
+                if (!$row) {
+                    $codigo = 1;
+                } else {
+                    $codigo = $row["codigo"] + 1;
+                }
+
+                for ($NumParcelas = 1; $NumParcelas <= $parcelas; $NumParcelas++) {
+                    if ($NumParcelas > 1) {
+                        //$dataDebito->add(new DateInterval('P1M'));
+                        //date_add($dataDebito, date_interval_create_from_date_string('1 month'));
+                        $dataDebito = date("Y-m-d", strtotime("+1 month", strtotime($dataDebito->format('Y-m-d'))));
+                        //$dataDebito = new DateTime($dataDebito);
+                    }
+
+                    //A DATA DE DÉBITO SEMPRE DEVERÁ SER UM OBJETO DE DATETIME. SE NÃO FOR, PASSARÁ A SER
+                    if(! is_object($dataDebito)) {
+                        $dataDebito = new DateTime($dataDebito);
+                    }
+
+                    $dataCompra = $AgendaLancamento->getDataCompra();
+                    //$dataDebito = $AgendaLancamento->getDataDebito();
+                    $dataDebito = $dataDebito;
+                    $valorTotal = $AgendaLancamento->getValorTotal() / $parcelas;
+                    $estabelecimento = $AgendaLancamento->getEstabelecimento();
+                    $formaPagamento = $AgendaLancamento->getFormaPagamento();
+                    $qdtParcelas = $AgendaLancamento->getQtdParcelas();
+                    $ativo = $AgendaLancamento->getAtivo();
+                    $observacao = $AgendaLancamento->getObs();
+                    $juros = $AgendaLancamento->getJuros();
+                    $totalGeral = $valorTotal + $juros;
+
+                    //RETIRADO ESSE CODIGO POIS OS LANCAMENTOS FUTUROS DEVEM TER O MESMO CÓDIGO PARA CADA LANÇAMENTO
+                    /* $row = $this->RetornaDado("SELECT codigo FROM lancamentos_futuros ORDER BY codigo DESC LIMIT 1");
+                      if (!$row) {
+                      $codigo = 1;
+                      } else {
+                      $codigo = $row["codigo"] + 1;
+                      } */
+
+                    $dataDebito = $functions->proximoDiaUtill($dataDebito->format('Y-m-d'));
+
+                    $AgendaLancamento->setCodigo($codigo);
+
+                    if (!$this->insertLoop(
+                        'lancamentos_futuros', "codigo,:data_compra,:data_debito,:valor_total,:estabelecimento,:forma_pagamento,:qtd_parcelas,:ativo,:obs,:numero_parcela,:juros,:total_geral", [
+                            ':codigo' => $codigo,
+                            ':data_compra' => "'" . $dataCompra . "'",
+                            ':data_debito' => "'" . $dataDebito->format('Y-m-d') . "'",
+                            ':valor_total' => $valorTotal,
+                            ':estabelecimento' => "'" . $estabelecimento . "'",
+                            ':forma_pagamento' => $formaPagamento,
+                            ':qtd_parcelas' => $qdtParcelas,
+                            ':ativo' => "'" . $ativo . "'",
+                            ':obs' => "'" . $observacao . "'",
+                            ':numero_parcela' => "'" . $NumParcelas . "'",
+                            ':juros' => $juros,
+                            ':total_geral' => $totalGeral,
+                        ]
+                    )) {
+
+                    }
+                }
+            } catch (\Exception $e) {
+                throw new \Exception("Erro na gravação de dados.", 500);
+            }
+        }
+        return true;
+
+    }
     public function agendarLancamento(AgendaLancamento $AgendaLancamento) {
         try {
             $functions = new functions();

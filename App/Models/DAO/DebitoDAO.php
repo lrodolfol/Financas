@@ -2,6 +2,7 @@
 
 namespace App\Models\DAO;
 
+use App\Models\Entidades\Caixa;
 use App\Models\Entidades\Debito;
 use App\Models\Entidades\Estabelecimentos;
 
@@ -211,8 +212,21 @@ class DebitoDAO extends BaseDAO {
                 if($result) {
                     $debito->setCodigoCabecalho($codigo);
                     $this->salvarItens($debito);
-                }
 
+                    $estabelecimentoDao = new EstabelecimentoDAO();
+                    $dadosEstabelecimento = $estabelecimentoDao->carregaEstabelecimento("S", $debito->getEstabelecimento());
+
+                    $Caixa = new Caixa();
+                    $Caixa->setDescricao("Debito gerado em " . ucfirst(strtolower($dadosEstabelecimento['nome'])));
+                    $Caixa->setObs($debito->getObs());
+                    $Caixa->setSaldo($debito->getValorTotal() * -1);
+                    $Caixa->setData($debito->getDataDebito());
+                    $Caixa->setCodigoSaidaCabecalho($debito->getCodigo());
+                    //INSERE O VALOR NO CAIXA
+                    $CaixaDAO = new CaixaDAO();
+                    $rowCaixa = $CaixaDAO->salvar($Caixa);
+                }
+                $codigo = null;
             } catch (\Exception $e) {
                 throw new \Exception("Erro na gravação de dados.", 500);
             }

@@ -15,6 +15,8 @@ use App\Models\DAO\EstabelecimentoDAO;
 use App\Models\DAO\ContasReceberDAO;
 use App\Models\DAO\CaixaDAO;
 use App\Models\DAO\ContaDAO;
+use App\Models\Entidades\AgendaLancamento;
+use App\Models\Entidades\Caixa;
 use App\Models\Entidades\Carteira;
 use App\Models\Entidades\Debito;
 use App\Models\Entidades\Usuario;
@@ -44,9 +46,13 @@ class ContaController extends Controller {
         $this->erro = $_FILES["arquivo_importacao"]["error"];
         $this->extensao = strrchr($_FILES['arquivo_importacao']['name'], '.');
         $this->extensoesPermitidas = array('.XML', '.JSON', '.CSV');
-        $this->layoutCsvMovimentacao = array (
+        $this->layoutCsvMovimentacaoDebito = array (
             "data_compra","valor_debito","valor_juros", "valor_desconto", "estabelecimento", "forma_pagamento",
             "repetir_n_meses","ativo","atipico","obs","produto","quantidade","und","valor_produto"
+        );
+        $this->layoutCsvMovimentacaoContasPagar = array (
+            "data_compra","data_debito","valor_total", "estabelecimento", "forma_pagamento", "numero_parcelas",
+            "obs","ativo","produto","quantidade","und","valor_produto"
         );
         $this->nomeTabelas = array("entradas", "estabelecimentos", "carteiras", "formas_pagamento", "caixa", "saida_cabecalho", "saidas_itens", "lancamentos_futuros", "lancamentos_futuros_itens", "contas_receber");
         $this->tabelas = array(
@@ -81,7 +87,18 @@ class ContaController extends Controller {
     }
 
     public function uploadPlanilhaMovimentacoes() {
-        $msg = $this->LeUploadPlanilhaMovimentacoesDebito();
+        $msg = "";
+        switch ($this->arquivoNome){
+            case "_financas_db.csv":
+                $msg = $this->LeUploadPlanilhaMovimentacoesDebito();
+                break;
+            case "_financas_cp.csv":
+                $msg = $this->LeUploadPlanilhaMovimentacoesContasPagar();
+                break;
+            default:
+                $msg = "Nome de arquivo incorreto.";
+        }
+
 
         if($msg != "success") {
             Sessao::gravaErro($msg);
@@ -91,20 +108,44 @@ class ContaController extends Controller {
         $this->render('/home/importaPlanilhaMovimentacoes');
     }
     private function ValidaCabecalhoMovimentacoes($cabecalho) : bool{
-        for($i = 0; $i <= count($this->layoutCsvMovimentacao); $i++){
-            if($i  == 0) {
-                //POR ALGUM MOTIVO A 1º COLUNA DO CSV ESTA VINDO COM CARACTER ESPECIAL E NÃO CONSEGUI TIRAR
-                //ZWNBSP
-                if(! strpos($cabecalho[$i ], "data_compra")){
-                    return false;
+        switch ($this->arquivoNome){
+            case "_financas_db.csv":
+                for($i = 0; $i <= count($this->layoutCsvMovimentacaoDebito); $i++){
+                    if($i  == 0) {
+                        //POR ALGUM MOTIVO A 1º COLUNA DO CSV ESTA VINDO COM CARACTER ESPECIAL E NÃO CONSEGUI TIRAR
+                        //ZWNBSP
+                        if(! strpos($cabecalho[$i], "data_compra")){
+                            return false;
+                        }
+                    }else{
+                        if($cabecalho[$i] != $this->layoutCsvMovimentacaoDebito[$i]) {
+                            return false;
+                        }
+                    }
                 }
-            }else{
-                if($cabecalho[$i ] != $this->layoutCsvMovimentacao[$i ]) {
-                    return false;
+                return true;
+                break;
+            case "_financas_cp.csv":
+                for($i = 0; $i <= count($this->layoutCsvMovimentacaoContasPagar); $i++){
+                    if($i  == 0) {
+                        //POR ALGUM MOTIVO A 1º COLUNA DO CSV ESTA VINDO COM CARACTER ESPECIAL E NÃO CONSEGUI TIRAR
+                        //ZWNBSP
+                        if($cabecalho[$i] != $this->layoutCsvMovimentacaoContasPagar[$i]) {
+                            return false;
+                        }
+                    }else{
+                        if($cabecalho[$i] != $this->layoutCsvMovimentacaoContasPagar[$i]) {
+                            return false;
+                        }
+                    }
                 }
-            }
+                return true;
+                break;
+            default:
+                return false;
         }
-        return true;
+
+
     }
     private function LeUploadPlanilhaMovimentacoesDebito() : string {
         if(!in_array(strtoupper($this->extensao), $this->extensoesPermitidas) == true){
@@ -128,36 +169,88 @@ class ContaController extends Controller {
                         continue;
                     }
 
+                    if(empty($dadosLinha[0])){ continue; }
+
                     $debito = new Debito();
-                    $debito->setAtivo($dadosLinha[array_search("ativo",$this->layoutCsvMovimentacao)]);
-                    $debito->setDataCompra($dadosLinha[array_search("data_compra",$this->layoutCsvMovimentacao)]);
-                    $debito->setDataDebito($dadosLinha[array_search("data_debito",$this->layoutCsvMovimentacao)]);
-                    $debito->setValorTotal($dadosLinha[array_search("valor_debito",$this->layoutCsvMovimentacao)]);
-                    $debito->setJuros($dadosLinha[array_search("valor_juros",$this->layoutCsvMovimentacao)]);
-                    $debito->setDesconto($dadosLinha[array_search("valor_desconto",$this->layoutCsvMovimentacao)]);
-                    $debito->setAtipico($dadosLinha[array_search("atipico",$this->layoutCsvMovimentacao)]);
-                    $debito->setEstabelecimento($dadosLinha[array_search("estabelecimento",$this->layoutCsvMovimentacao)]);
-                    $debito->setFormaPagamento($dadosLinha[array_search("forma_pagamento",$this->layoutCsvMovimentacao)]);
-                    $debito->setObs($dadosLinha[array_search("obs",$this->layoutCsvMovimentacao)]);
+                    $debito->setAtivo($dadosLinha[array_search("ativo",$this->layoutCsvMovimentacaoDebito)]);
+                    $debito->setDataCompra($dadosLinha[array_search("data_compra",$this->layoutCsvMovimentacaoDebito)]);
+                    $debito->setDataDebito($dadosLinha[array_search("data_debito",$this->layoutCsvMovimentacaoDebito)]);
+                    $debito->setValorTotal($dadosLinha[array_search("valor_debito",$this->layoutCsvMovimentacaoDebito)]);
+                    $debito->setJuros($dadosLinha[array_search("valor_juros",$this->layoutCsvMovimentacaoDebito)]);
+                    $debito->setDesconto($dadosLinha[array_search("valor_desconto",$this->layoutCsvMovimentacaoDebito)]);
+                    $debito->setAtipico($dadosLinha[array_search("atipico",$this->layoutCsvMovimentacaoDebito)]);
+                    $debito->setEstabelecimento($dadosLinha[array_search("estabelecimento",$this->layoutCsvMovimentacaoDebito)]);
+                    $debito->setFormaPagamento($dadosLinha[array_search("forma_pagamento",$this->layoutCsvMovimentacaoDebito)]);
+                    $debito->setObs($dadosLinha[array_search("obs",$this->layoutCsvMovimentacaoDebito)]);
                     $debito->setQtdParcelas(1);
 
-                    $debito->setProduto($dadosLinha[array_search("produto",$this->layoutCsvMovimentacao)]);
-                    $debito->setQtdProduto($dadosLinha[array_search("quantidade",$this->layoutCsvMovimentacao)]);
-                    $debito->setUnidadeMedida($dadosLinha[array_search("und",$this->layoutCsvMovimentacao)]);
-                    $debito->setValorProduto($dadosLinha[array_search("valor_produto",$this->layoutCsvMovimentacao)]);
+                    $debito->setProduto($dadosLinha[array_search("produto",$this->layoutCsvMovimentacaoDebito)]);
+                    $debito->setQtdProduto($dadosLinha[array_search("quantidade",$this->layoutCsvMovimentacaoDebito)]);
+                    $debito->setUnidadeMedida($dadosLinha[array_search("und",$this->layoutCsvMovimentacaoDebito)]);
+                    $debito->setValorProduto($dadosLinha[array_search("valor_produto",$this->layoutCsvMovimentacaoDebito)]);
                     $debito->setAtivoProduto('S');
                     array_push($debitos, $debito);
 
                     $cont ++;
                 }
 
-                $debitoDao->salvarDebitosArray($debitos);
+                if($debitoDao->salvarDebitosArray($debitos)){
+
+                }
 
                 fclose($handle);
             }
 
             return "success";
         }
+    }
+    private function LeUploadPlanilhaMovimentacoesContasPagar() : string {
+        if(!in_array(strtoupper($this->extensao), $this->extensoesPermitidas) == true){
+            return "Escolha um arquivo em formato CSV";
+        }else{
+            $ContasPagarDao = new AgendaLancamentoDAO();
+            $ContasPagar[] = new AgendaLancamento();
+
+            if (($handle = fopen($this->arquivoNomeTemp, "r")) !== FALSE) {
+                $cont = 0;
+                $cabecalho = "";
+                while(! feof($handle)) {
+                    $line = fgetcsv($handle);
+                    $dadosLinha = explode(";", $line[0]);
+
+                    //VALIDA OS CABEÇALHOS
+                    if($cont == 0) {
+                        if(! $this->ValidaCabecalhoMovimentacoes($dadosLinha)) {
+                            return "Ordem das colunas incorretas. Consulte o Layout";
+                        }
+                        $cont++;
+                        continue;
+                    }
+
+                    if(empty($dadosLinha[0])){ continue; }
+
+                    $contaPagar = new AgendaLancamento();
+                    $contaPagar->setAtivo($dadosLinha[array_search("ativo",$this->layoutCsvMovimentacaoContasPagar)]);
+                    $contaPagar->setQtdParcelas($dadosLinha[array_search("numero_parcelas",$this->layoutCsvMovimentacaoContasPagar)]);
+                    $contaPagar->setDataDebito($dadosLinha[array_search("data_debito",$this->layoutCsvMovimentacaoContasPagar)]);
+                    $contaPagar->setDataCompra($dadosLinha[array_search("data_compra",$this->layoutCsvMovimentacaoContasPagar)]);
+                    $contaPagar->setValorTotal($dadosLinha[array_search("valor_total",$this->layoutCsvMovimentacaoContasPagar)]);
+                    $contaPagar->setFormaPagamento($dadosLinha[array_search("forma_pagamento",$this->layoutCsvMovimentacaoContasPagar)]);
+                    $contaPagar->setObs($dadosLinha[array_search("obs",$this->layoutCsvMovimentacaoContasPagar)]);
+
+                    $contaPagar->setProduto($dadosLinha[array_search("produto",$this->layoutCsvMovimentacaoContasPagar)]);
+                    $contaPagar->setQtdProduto($dadosLinha[array_search("quantidade",$this->layoutCsvMovimentacaoContasPagar)]);
+                    $contaPagar->setUnidadeMedida($dadosLinha[array_search("und",$this->layoutCsvMovimentacaoContasPagar)]);
+                    $contaPagar->setValorProduto($dadosLinha[array_search("valor_produto",$this->layoutCsvMovimentacaoContasPagar)]);
+                    array_push($ContasPagar, $contaPagar);
+
+                    $cont++;
+                }
+
+                $ContasPagarDao->agendaLancamentoArray($ContasPagar);
+            }
+        }
+
     }
 
     public function importarConta() {
