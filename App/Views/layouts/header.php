@@ -4,7 +4,7 @@ setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
 date_default_timezone_set('America/Sao_Paulo');
 $qtdDebitoVencido = App\Lib\Sessao::retornaQtdDebitoVencido();
 $qtdCreditoVencido = App\Lib\Sessao::retornaQtdCreditoVencido();
-$baseDadosOperante;
+$baseDadosOperante = null;
 $usuarioLogado = \App\Lib\Sessao::retornaUsuario();
 
 //AQUI IRÁ VERIFICAR(através de cookie) EM QUAL BASE DE DADOS SERÁ FEITO AS OPERAÇÕES

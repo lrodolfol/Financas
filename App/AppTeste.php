@@ -19,20 +19,20 @@ class AppTeste {
         /*
          * Constantes do sistema
          */
-        define('EMAIL_DESENVOLVEDOR', 'financas@kellyerodolfo.com.br');
+        define('EMAIL_DESENVOLVEDOR', 'financas@tinosnegocios.com.br');
         define('RAIZ_SITE', $_SERVER['DOCUMENT_ROOT'] . "/financas"); 
         define('NOME_SITE', $_SERVER['SERVER_NAME']);
         define('APP_HOST', $_SERVER['HTTP_HOST'] . "/financas");
         define('PATH', realpath('./'));
         define('TITLE', "Financas " . (Lib\Sessao::retornaUsuario() ) ) ;
-        define('DB_HOST', "br1020.hostgator.com.br:3306");
+        define('DB_HOST', "");
         //define('DB_USER', "root");
-        define('DB_PASSWORD', "ygvX10c07J");
+        define('DB_PASSWORD', "");
         if (isset($_POST['User']) && $_POST['User'] = "true") {
-            define('DB_NAME', "kellye31_financas");
+            define('DB_NAME', "");
             //define('NAME_USER', $_POST['user']);
 			define('NAME_USER', $_POST['user']);
-			define('DB_USER', "kellye31_rodolfo");
+			define('DB_USER', "");
         } else {
 			define('DB_USER', "kellye31_rodolfo");
             if(Lib\Sessao::retornaUsuario() ) {

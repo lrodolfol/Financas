@@ -14,8 +14,8 @@ class Sessao {
     }
 
     public static function retornaMensagem() {
-        $t = $_SESSION['mensagem'];
-        return ($_SESSION['mensagem']) ? $_SESSION['mensagem'] : "";
+        //$t = $_SESSION['mensagem'];
+        return (isset($_SESSION['mensagem'])) ? $_SESSION['mensagem'] : "";
     }
 
     public static function gravaFormulario($form) {
@@ -27,7 +27,6 @@ class Sessao {
     }
 
     public static function retornaValorFormulario($key) {
-        $t = $_SESSION['form'][$key];
         return (isset($_SESSION['form'][$key])) ? $_SESSION['form'][$key] : "";
     }
 
@@ -128,7 +127,7 @@ class Sessao {
     }
 
     public static function retornaQtdDebitoVencido() {
-        return ($_SESSION['qtdDebitoVencido']) ? $_SESSION['qtdDebitoVencido'] : "";
+        return (isset($_SESSION['qtdDebitoVencido'])) ? $_SESSION['qtdDebitoVencido'] : "";
     }
     
     public static function gravaQtdCreditoVencido($qtdCreditoVencido) {
@@ -140,7 +139,7 @@ class Sessao {
     }
 
     public static function retornaQtdCreditoVencido() {
-        return ($_SESSION['qtdCreditoVencido']) ? $_SESSION['qtdCreditoVencido'] : "";
+        return (isset($_SESSION['qtdCreditoVencido'])) ? $_SESSION['qtdCreditoVencido'] : "";
     }
 
     public static function gravaDesenvolvedor($desenvolvedor) {
