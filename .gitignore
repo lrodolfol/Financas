@@ -4,3 +4,4 @@ App/AppLocal.php
 App/Teste.php
 vendor/
 .idea
+.vscode
