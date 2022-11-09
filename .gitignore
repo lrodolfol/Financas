@@ -5,3 +5,5 @@ App/Teste.php
 vendor/
 .idea
 .vscode
+composer.lock
+/vendor
