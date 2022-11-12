@@ -116,7 +116,7 @@ class UsuarioController extends Controller {
         } else {
             $rowUsuario = $UsuarioDAO->criarBaseDadosUsuario($Usuario);
             if ($rowUsuario) {
-                Sessao::gravaMensagem("Usuário(a) " . $$_POST['nome'] . " cadastrado(a) com sucesso");
+                Sessao::gravaMensagem("Usuário(a) " . $_POST['nome'] . " cadastrado(a) com sucesso");
             } else {
                 Sessao::gravaMensagem("Não foi possivel criar base de dados para o usuario");
             }

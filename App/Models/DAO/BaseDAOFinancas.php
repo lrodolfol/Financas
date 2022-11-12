@@ -208,15 +208,15 @@ abstract class BaseDAOFinancas {
             foreach ($sqlCreateDataBase as $query) { //CRIA NOVO USUÁRIO E TENTA CRIAR A BASE DE DADOS DO USUARIO
                 $this->conexao->exec($query);
             }
-            $this->conexao->commit();
+            //$this->conexao->commit();
 
-            //TENTA FAZER A CONEXÃO COM A BASE DO USUÁRIO CRIADA
+            //TENTA FAZER A CONEXÃO COM A BASE DO USUÁRIO CRIADO
             $connectionLocal = "";
             $pdoConfigLocal = "mysql" . ":" . "host=" . "localhost" . ";";
             $pdoConfigLocal .= "dbname=financas_" . $nomeUsuario . ";";
             $pdoConfigLocal .= "charset=utf8;";
             try {
-                $connectionLocal = new PDO($pdoConfigLocal, "root", "", array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
+                $connectionLocal = new PDO($pdoConfigLocal, "root", DB_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
                 $connectionLocal->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             } catch (PDOException $e) {
                 $connectionLocal->rollBack();
@@ -233,7 +233,7 @@ abstract class BaseDAOFinancas {
             foreach ($sqlCreateTables as $query) { //CRIA NOVO USUÁRIO E TENTA CRIAR A BASE DE DADOS DO USUARIO
                 $connectionLocal->exec($query);
             }
-            $connectionLocal->commit();
+            //$connectionLocal->commit();
             return true;
         } catch (Exception $ex) {
             $connectionLocal->rollBack();

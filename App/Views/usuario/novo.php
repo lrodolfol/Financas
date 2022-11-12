@@ -58,6 +58,11 @@
                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                     <?php echo $Sessao::retornaMensagem() ?>
                 </div>
+                
+                <a href="http://<?=APP_HOST?>">
+                    <button type="button" class="btn btn-info">Inicio</button>
+                </a>
+                
             <?php } ?>
 
         </div>

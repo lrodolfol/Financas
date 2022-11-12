@@ -370,7 +370,8 @@ abstract class BaseDAO {
         //return true;
     }
 
-    public function listaPaginacao($tabela, $codigo = null, $dataInicial = null, $dataFinal = null, $palavra = null, $paginaSelecionada, $totalPorPagina, $lucro_real = null) {
+    public function listaPaginacao($tabela, $paginaSelecionada, $totalPorPagina, $codigo = null, $dataInicial = null, $dataFinal = null, 
+                                    $palavra = null, $lucro_real = null) {
         $where = "";
         if ($codigo) {
             $sql = "SELECT * FROM " . $tabela . " e WHERE e.codigo = " . base64_decode($codigo) . "";

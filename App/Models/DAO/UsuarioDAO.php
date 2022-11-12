@@ -65,6 +65,7 @@ class UsuarioDAO extends BaseDAOFinancas {
     public function validaUsuario(Usuario $Usuario) {
         $sql = "SELECT * FROM usuarios WHERE nome = '" . $Usuario->getNome() . "'";
         $row = $this->FinancasRetornaDado($sql);
+        if(!isset($row) || $row === false) return null;
         return $row['nome'];
     }
 

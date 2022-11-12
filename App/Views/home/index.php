@@ -24,7 +24,7 @@ $dizimo = function($valor) {
     return ( ( $valor / 100) * $percentualDizimo);
 };
 $formataValor = function($valor) {
-    return number_format($valor, 2, ',', '.');
+    return (isset($valor) ? number_format($valor, 2, ',', '.') : 0);
 };
 $retornaValorPorcentagem = function($valorMesAnterior, $valorMesAtual) {
     if(! isset($valorMesAnterior)) {
@@ -107,7 +107,7 @@ $retornaValorPorcentagem = function($valorMesAnterior, $valorMesAtual) {
                 <?php
             }
 
-            $saldoRestante = number_format($saldo - $debitoFuturo, '2', ',', '.');
+            $saldoRestante = number_format($saldo - (isset($debitoFuturo) ? $debitoFuturo : 0), '2', ',', '.');
             ?>
 
             <b><u>ATENÇÃO! seu saldo será de R$ <?php echo $saldoRestante; ?> a partir daí.</u></b>
@@ -116,7 +116,7 @@ $retornaValorPorcentagem = function($valorMesAnterior, $valorMesAtual) {
         <div class="col-md-6">
             <h3>Contas a Receber</h3>
             <?php
-            $creditoFuturo = $viewVar["creditoFuturo"];
+            $creditoFuturo = (isset($viewVar["creditoFuturo"]) ? $viewVar["creditoFuturo"] : 0);
             if ($creditoFuturo > 0) {
                 ?>
                 <form action="http://<?php echo APP_HOST; ?>/home/index" method="post" >
@@ -157,10 +157,17 @@ $retornaValorPorcentagem = function($valorMesAnterior, $valorMesAtual) {
         $cont++;
     }
    
-    $ultimoVr = $viewVar["graficoSaldoMax"][count($viewVar["graficoSaldoMax"]) - 1]["total"];
-    $pultimoVr = $viewVar["graficoSaldoMax"][count($viewVar["graficoSaldoMax"]) - 2]["total"];
-    $valor = $retornaValorPorcentagem($pultimoVr, $ultimoVr);
-    $evolucaoValor = $ultimoVr - $pultimoVr;
+    $ultimoVr = 0;
+    $pultimoVr = 0;
+    $valor = 0;
+    $evolucaoValor = 0;
+    if(isset($viewVar["graficoSaldoMax"]) && count($viewVar["graficoSaldoMax"]) > 0) {
+        $ultimoVr = $viewVar["graficoSaldoMax"][count($viewVar["graficoSaldoMax"]) - 1]["total"];
+        $pultimoVr = $viewVar["graficoSaldoMax"][count($viewVar["graficoSaldoMax"]) - 2]["total"];
+        $valor = $retornaValorPorcentagem($pultimoVr, $ultimoVr);
+        $evolucaoValor = $ultimoVr - $pultimoVr;
+    }
+    
     /* $dataPoints = array(
       array("y" => 25, "label" => "Sunday"),
       array("y" => 15, "label" => "Monday"),
@@ -192,7 +199,7 @@ $retornaValorPorcentagem = function($valorMesAnterior, $valorMesAtual) {
     <div class="container">
         <div class="starter-template">
             <div class="col-md-12">
-                <b><u>O gráfico de rentabilidade irá apacer após o 1º registro de valores</u></b>
+                <b><u>O gráfico de rentabilidade irá apacer após a 1ª movimentação de caixa</u></b>
             </div>    
         </div>
     </div>

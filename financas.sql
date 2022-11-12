@@ -7,6 +7,8 @@
 -- Versão do servidor: 8.0.0-dmr-log
 -- versão do PHP: 7.4.26
 
+--CREATE SCHEMA `financas` DEFAULT CHARACTER SET utf8 ;
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";

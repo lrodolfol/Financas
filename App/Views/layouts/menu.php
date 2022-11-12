@@ -248,7 +248,7 @@
                     </li>
                 <?php }  ?>
                 <li>
-                    <?php $periodo = utf8_encode(ucfirst(strftime('%B de %Y'))); ?>
+                    <?php $periodo = utf8_encode(ucfirst(date('M Y'))); ?>
                     <a> <?php echo $periodo; ?></a>
                 </li>
                 <li>

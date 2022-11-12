@@ -27,17 +27,17 @@ class AppLocal {
         define('TITLE', "Financas " . (Lib\Sessao::retornaUsuario() ) ) ;
         define('DB_HOST', "");
         //define('DB_USER', "root");
-        define('DB_PASSWORD', "");
+        define('DB_PASSWORD', "sinqia123");
         if (isset($_POST['User']) && $_POST['User'] = "true") {
-            define('DB_NAME', "");
+            define('DB_NAME', "financas");
             //define('NAME_USER', $_POST['user']);
-			define('NAME_USER', $_POST['user']);
-			define('DB_USER', "");
+			define('NAME_USER', $_POST['User']);
+			define('DB_USER', "root");
         } else {
-			define('DB_USER', "kellye31_rodolfo");
+			define('DB_USER', "root");
             if(Lib\Sessao::retornaUsuario() ) {
                 $userName = Lib\Sessao::retornaUsuario();
-                define('DB_NAME', "kellye31_financas_" . $userName . "_teste");
+                define('DB_NAME', "financas_{$userName}");
             }else{
                 //define('DB_NAME', "financas_padrao");
             }
