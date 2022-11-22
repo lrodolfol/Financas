@@ -20,14 +20,14 @@ class AppLocal {
          * Constantes do sistema
          */
         define('EMAIL_DESENVOLVEDOR', 'financas@tinosnegocios.com.br');
-        define('RAIZ_SITE', $_SERVER['DOCUMENT_ROOT']); 
-        define('NOME_SITE', $_SERVER['SERVER_NAME']);
-        define('APP_HOST', $_SERVER['HTTP_HOST']);
+        define('RAIZ_SITE', $_SERVER['DOCUMENT_ROOT'] . "/financas"); 
+        define('NOME_SITE', $_SERVER['SERVER_NAME'] . "/financas");
+        define('APP_HOST', $_SERVER['HTTP_HOST'] . "/financas");
         define('PATH', realpath('.'));
         define('TITLE', "Financas " . (Lib\Sessao::retornaUsuario() ) ) ;
         define('DB_HOST', "");
         //define('DB_USER', "root");
-        define('DB_PASSWORD', "sinqia123");
+        define('DB_PASSWORD', "1234");
         if (isset($_POST['User']) && $_POST['User'] = "true") {
             define('DB_NAME', "financas");
             //define('NAME_USER', $_POST['user']);
@@ -95,7 +95,7 @@ class AppLocal {
         if (!class_exists($nomeClasse)) {
             throw new Exception("Erro na aplicação", 500);
         }
-
+        
         if ($this->action != null && method_exists($objetoController, $this->action)) {
             $objetoController->{$this->action}($this->params);
             return;
@@ -110,11 +110,10 @@ class AppLocal {
 
     public function url() {
 
-        if (isset($_SERVER['REQUEST_URI'])) {
+        if (isset($_GET['url'])) {
 
-            $path = $_SERVER['REQUEST_URI'];
+            $path = $_GET['url'];
             $path = rtrim($path, '/');
-            $path = ltrim($path, '/');
             $path = filter_var($path, FILTER_SANITIZE_URL);
 
             $path = explode('/', $path);

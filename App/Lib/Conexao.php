@@ -16,7 +16,10 @@ class Conexao {
 
     public static function getConnection() {
         if (!Sessao::retornaUsuario()) {
-            throw new Exception("Conexão suspensa. Faça o login novamente");
+            //var_dump(APP_HOST, NOME_SITE,RAIZ_SITE);
+            //DIE();
+            header("Location:" . "http://" . NOME_SITE);
+            //throw new Exception("Conexão suspensa. Faça o login novamente");
         }
 
         $pdoConfig = DB_DRIVER . ":" . "host=" . DB_HOST . ";";
