@@ -6,3 +6,5 @@ vendor/
 composer.lock
 /vendor
 /public/usuarios/
+/nbproject
+.github/
