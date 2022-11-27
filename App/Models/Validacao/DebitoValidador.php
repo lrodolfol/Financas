@@ -39,7 +39,7 @@ class DebitoValidador {
             return "Código de débito não encontrado";
         } else {
             $codigo = $row['codigo'];
-            $valorTotal = number_format($row['valor_total'], '2', '.', ',');
+            $valorTotal = number_format($row['valor_total'], '2', ',', '.');
             $valorTotalComp = number_format($row['valor_total'],2,',','.');
 
             $sql = "SELECT SUM(valor_produto * qtd_produto) FROM saidas_itens WHERE codigo_cabecalho = " . $Debito->getCodigoCabecalho() . "";
@@ -52,8 +52,8 @@ class DebitoValidador {
                 $valorValidacao = $Debito->getQtdProduto() * $Debito->getValorProduto() + $valorItens[0];
                 $valorValidacao = floor($valorValidacao * 100) / 100;
                 //$valorValidacao = number_format($valorValidacao, '2', '.', ',');
-                $VRTESTE = $valorValidacao - $valorTotalComp;
-                if ($valorValidacao > $valorTotal) {
+                $vrDif = $valorValidacao - $valorTotalComp;
+                if ($valorValidacao > (floatval($valorTotal) + $vrDif) ) {
                     //$rr = $Debito->getQtdProduto() * $Debito->getValorProduto() + $valorItens[0];
                     $valorRestante = $valorTotalComp - $valorItens[0];
                     return "O valor desse produto exede o valor disponivel de R$ " . number_format($valorRestante, '2', ',', '.') . " para essa saida. Total de R$ " . number_format($valorTotalComp, '2', ',', '.') . " ";

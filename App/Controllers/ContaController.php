@@ -200,7 +200,6 @@ class ContaController extends Controller {
 
                 fclose($handle);
             }
-
             return "success";
         }
     }
@@ -229,6 +228,9 @@ class ContaController extends Controller {
 
                     if(empty($dadosLinha[0])){ continue; }
 
+                    $dataDebito = $dadosLinha[array_search("data_debito",$this->layoutCsvMovimentacaoContasPagar)];
+                    $dataDebito = str_replace($dataDebito,"/","-");
+
                     $contaPagar = new AgendaLancamento();
                     $contaPagar->setAtivo($dadosLinha[array_search("ativo",$this->layoutCsvMovimentacaoContasPagar)]);
                     $contaPagar->setQtdParcelas($dadosLinha[array_search("numero_parcelas",$this->layoutCsvMovimentacaoContasPagar)]);
@@ -237,6 +239,8 @@ class ContaController extends Controller {
                     $contaPagar->setValorTotal($dadosLinha[array_search("valor_total",$this->layoutCsvMovimentacaoContasPagar)]);
                     $contaPagar->setFormaPagamento($dadosLinha[array_search("forma_pagamento",$this->layoutCsvMovimentacaoContasPagar)]);
                     $contaPagar->setObs($dadosLinha[array_search("obs",$this->layoutCsvMovimentacaoContasPagar)]);
+                    $contaPagar->setEstabelecimento($dadosLinha[array_search("estabelecimento",$this->layoutCsvMovimentacaoContasPagar)]);
+                    $contaPagar->setJuros(0);
 
                     $contaPagar->setProduto($dadosLinha[array_search("produto",$this->layoutCsvMovimentacaoContasPagar)]);
                     $contaPagar->setQtdProduto($dadosLinha[array_search("quantidade",$this->layoutCsvMovimentacaoContasPagar)]);
@@ -250,7 +254,7 @@ class ContaController extends Controller {
                 $ContasPagarDao->agendaLancamentoArray($ContasPagar);
             }
         }
-
+        return "success";
     }
 
     public function importarConta() {
