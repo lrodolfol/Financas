@@ -5,8 +5,8 @@
   <h3 align="center">Sistema Finanças</h3>
   <h4 align="center">Sistemas para controle de finanças pessoais</h4>
   <h4 align="center"> 
-	🚧  7.4.*  🚧
-	🚧  Descontinuado  🚧
+	🚧  7.4.*  🚧 <br>
+	🚧  Porjeto Descontinuado  🚧
 </h4>
 
 Não segue padrão de código e nem todas partes do projeto há uso de boas práticas. Esta criação é para uso pessoal e para realização de novas funcionalidade e estudos diários.
