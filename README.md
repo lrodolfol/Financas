@@ -9,7 +9,10 @@
 	🚧  Porjeto Descontinuado  🚧
 </h4>
 
-Não segue padrão de código e nem todas partes do projeto há uso de boas práticas. Esta criação é para uso pessoal e para realização de novas funcionalidade e estudos diários.
+<strong>Não segue padrão de código e nem todas partes do projeto há uso de boas práticas. Esta criação é para uso pessoal e para realização de novas funcionalidade e estudos diários.</strong>
+
+<b>Trello</b>
+https://trello.com/b/Lgqv0jNr/financas
 
 </p>
 
